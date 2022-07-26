@@ -2,6 +2,9 @@ import google.auth
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
+SHEET_ID = "1oizPnNYIEzSLL6CrjlAMZdySw90jfTJf_2X9SFHejTM"
+RANGE = "'Form Responses 1'!B:B" # A1 Notation
+
 
 def get_urls(spreadsheet_id, range_name):
     creds, _ = google.auth.default()
@@ -20,5 +23,5 @@ def get_urls(spreadsheet_id, range_name):
         return error
 
 if __name__ == '__main__':
-    get_urls("1oizPnNYIEzSLL6CrjlAMZdySw90jfTJf_2X9SFHejTM", "'Form Responses 1'!B:B")
+    get_urls(SHEET_ID, RANGE)
 
