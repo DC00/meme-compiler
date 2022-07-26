@@ -13,9 +13,11 @@ def get_urls(spreadsheet_id, range_name):
         service = build('sheets', 'v4', credentials=creds)
 
         result = service.spreadsheets().values().get(spreadsheetId=spreadsheet_id, range=range_name).execute()
+
         urls = result.get('values', [])
         urls.pop(0)
         urls = [ url[0] for url in urls ]
+
         print(urls)
         return result
     except HttpError as error:
