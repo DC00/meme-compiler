@@ -9,18 +9,17 @@ class FormService:
         return cls(sheet_id, range_name).setup()
 
     def __init__(self, sheet_id, range_name):
-        self.sheet_id = sheet_id
+        self.sheet_id   = sheet_id
         self.range_name = range_name
 
     def setup(self):
         self.creds, _ = google.auth.default()
+        self.service  = build('sheets', 'v4', credentials=self.creds)
         return self
 
     def urls(self):
         try:
-            service = build('sheets', 'v4', credentials=self.creds)
-
-            result = service.spreadsheets().values().get(spreadsheetId=sheet_id, range=range_name).execute()
+            result = self.service.spreadsheets().values().get(spreadsheetId=sheet_id, range=range_name).execute()
 
             urls = result.get('values', [])
             urls.pop(0)
@@ -30,6 +29,9 @@ class FormService:
         except HttpError as error:
             print(f"An error occurred: {error}")
             return error
+
+    def update(self, range_name, value_input_option, new_values):
+        pass
 
 
 if __name__ == '__main__':
