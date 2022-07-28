@@ -57,9 +57,6 @@ class FormService:
 
         return row
 
-    def backup(self):
-        pass
-
 if __name__ == "__main__":
     sheet_id = "1oizPnNYIEzSLL6CrjlAMZdySw90jfTJf_2X9SFHejTM"
 

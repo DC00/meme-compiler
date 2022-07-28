@@ -8,12 +8,12 @@ class MemeCompiler:
 
     def setup(self):
         self.form_service = FormService.build("1oizPnNYIEzSLL6CrjlAMZdySw90jfTJf_2X9SFHejTM")
-        self.download_service = DownloadService.build()
+        self.video_service = VideoService.build()
         return self
 
     def ingest(self):
         urls = self.form_service.urls()
-        self.download_service.download(urls)
+        self.video_service.download(urls)
 
 if __name__ == "__main__":
     compiler = MemeCompiler.build()
