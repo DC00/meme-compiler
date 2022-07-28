@@ -47,12 +47,15 @@ class FormService:
 
     def update(self, url):
         row = self.row_of(url)
-        range_name = f"'Form Responses 1'!C{row}"
-        values = [ [self.COMPLETED_NOTE] ]
-        body = { 'values': values }
 
-        return self.service.spreadsheets().values().update(spreadsheetId=self.sheet_id, range=range_name, valueInputOption=self.INPUT_OPTION, body=body).execute()
+        if row > 0:
+            range_name = f"'Form Responses 1'!C{row}"
+            values = [ [self.COMPLETED_NOTE] ]
+            body = { 'values': values }
 
+            return self.service.spreadsheets().values().update(spreadsheetId=self.sheet_id, range=range_name, valueInputOption=self.INPUT_OPTION, body=body).execute()
+
+        return row
 
 if __name__ == '__main__':
     sheet_id = "1oizPnNYIEzSLL6CrjlAMZdySw90jfTJf_2X9SFHejTM"
@@ -60,6 +63,6 @@ if __name__ == '__main__':
     fs = FormService.build(sheet_id)
     print(fs.urls())
 
-    #url = 'https://www.youtube.com/watch?v=ImUp_Yha3Ls'
-    #fs.update(url)
+    # url = 'https://www.youtube.com/watch?v=ImUp_Yha3Ls'
+    # fs.update(url)
 
