@@ -15,7 +15,9 @@ class MemeCompiler:
         urls = self.form_service.urls()
         self.download_service.download(urls)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     compiler = MemeCompiler.build()
 
     compiler.ingest()
+
+    # TODO: combine videos with ffmpeg
