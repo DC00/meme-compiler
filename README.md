@@ -37,7 +37,13 @@ pip install -r requirements.txt
 
 ### YT-DLP
 
-YoutubeDL.py source code is hard to follow so documenting the parameters used for initialization here:
+Can optionally use the conf file as a command line argument for the executable:
+
+```
+yt-dlp --config-location ./yt-dlp.conf <url>
+```
+
+The configurations in the yt-dlp.conf file are also used in the python client YoutubeDL initialization. Since the source code is hard to follow I am documenting what the parameters do here:
 
 ```
 params = {
@@ -58,8 +64,4 @@ params = {
 
 `outtmpl`: output filename format `video_title_without_spaces_youtube[BaW_jenozKc].mp4`
 
-All of the above are in `yt-dlp.conf` as well. Can use conf file as command line argument:
-
-```
-yt-dlp --config-location ./yt-dlp.conf <url>
-```
+`ext`: file extension
