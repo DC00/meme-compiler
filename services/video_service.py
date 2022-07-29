@@ -7,8 +7,15 @@ class VideoService:
         return cls().setup()
 
     def setup(self):
-        # setup yt-dlp from yt-dlp.conf
-        self.ydl = YoutubeDL()
+        params = {
+            "restrictfilenames": True,
+            "format": "bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4]",
+            "paths": {
+                "home": "./"
+            },
+            "outtmpl": "%(title)s_%(extractor)s[%(id)s].%(ext)s"
+        }
+        self.ydl = YoutubeDL(params)
         return self
 
     def download(self, urls):
