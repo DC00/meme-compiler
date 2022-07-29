@@ -20,17 +20,17 @@ export GOOGLE_APPLICATION_CREDENTIALS='path/to/creds.json'
 
 ### Environment
 
-- Create virtual environment:
+Create virtual environment:
 ```
 virtualenv env
 ```
 
-- Source environment:
+Source environment:
 ```
 source env/bin/activate
 ```
 
-- Install dependencies:
+Install dependencies:
 ```
 pip install -r requirements.txt
 ```
