@@ -8,7 +8,7 @@ Generates a compilation video from submitted video urls
 
 https://cloud.google.com/docs/authentication/getting-started#auth-cloud-implicit-python
 
-- Go to google cloud console: console.cloud.google.com
+- Go to google cloud console: `console.cloud.google.com`
 - Go to `meme-compiler` project
 - Select "Service Accounts" and click on the service account for the project
 - Go to "Keys"
@@ -43,7 +43,7 @@ Can optionally use the conf file as a command line argument for the executable:
 yt-dlp --config-location ./yt-dlp.conf <url>
 ```
 
-The configurations in the yt-dlp.conf file are also used in the python client YoutubeDL initialization. Since the source code is hard to follow I am documenting what the parameters do here:
+The configurations in the yt-dlp.conf file are also used in the python client YoutubeDL initialization. YT-DLP source code is hard to follow so  documenting what the parameters do here:
 
 ```
 params = {
