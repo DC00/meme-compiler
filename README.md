@@ -62,6 +62,6 @@ params = {
 
 `paths`: Location of output directory
 
-`outtmpl`: output filename format `video_title_without_spaces_youtube[BaW_jenozKc].mp4`
+`outtmpl`: output filename format `video_title_without_spaces_youtube[video_id].mp4`
 
 `ext`: file extension
