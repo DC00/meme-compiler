@@ -24,6 +24,6 @@ class MemeCompiler:
 if __name__ == "__main__":
     compiler = MemeCompiler.build()
 
-    compiler.backup()
+    compiler.ingest()
 
     # TODO: combine videos with ffmpeg

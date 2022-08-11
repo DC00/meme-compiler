@@ -26,4 +26,4 @@ six==1.16.0
 uritemplate==4.1.1
 urllib3==1.26.11
 websockets==10.3
-yt-dlp==2022.7.18
+yt-dlp==2022.8.8
