@@ -1,18 +1,19 @@
-import google.auth
 import functools
+import google.auth
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+from response import *
 
 class FormService:
 
     SHEET_OFFSET = 2
     COMPLETED_NOTE = "processed"
-    URL_RANGE = "'Form Responses 1'!B:B"
+    CELL_RANGE = "'Form Responses 1'"
     INPUT_OPTION = "USER_ENTERED"
 
     @classmethod
     def build(cls, sheet_id):
-        return cls(sheet_id).setup()
+        return cls(sheet_id).setup().read()
 
     def __init__(self, sheet_id):
         self.sheet_id = sheet_id
@@ -23,22 +24,33 @@ class FormService:
 
         return self
 
-    @functools.lru_cache(maxsize=10000)
-    def urls(self):
-        # print(fs.urls.cache_info())
+    def read(self):
         try:
-            result = self.service.spreadsheets().values().get(spreadsheetId=self.sheet_id, range=self.URL_RANGE).execute()
+            result = self.service.spreadsheets().values().get(spreadsheetId=self.sheet_id, range=self.CELL_RANGE).execute()
 
-            urls = result.get("values", [])
-            urls.pop(0)
-            urls = [ url[0] for url in urls ]
+            rows = result.get("values", [])
+            rows.pop(0)
+            rows = list(filter(None, rows))
 
-            return urls
-
+            self.responses = [ Response(**self.params_for(row)) for row in rows ]
         except HttpError as error:
             print(f"An error occurred: {error}")
 
             return error
+
+        return self
+
+    def params_for(self, row):
+        return {
+            "timestamp": row[0],
+            "url": row[1],
+            "start_at": row[2] if len(row) > 2 else "",
+            "end_at": row[3] if len(row) > 3 else ""
+        }
+
+    @functools.lru_cache(maxsize=10000)
+    def urls(self):
+        return [ response.url for response in self.responses if response.is_valid() ]
 
     def row_of(self, url):
         values = self.urls()
@@ -61,6 +73,7 @@ if __name__ == "__main__":
     sheet_id = "1oizPnNYIEzSLL6CrjlAMZdySw90jfTJf_2X9SFHejTM"
 
     fs = FormService.build(sheet_id)
+
     print(fs.urls())
 
     # url = "https://www.youtube.com/watch?v=ImUp_Yha3Ls"
