@@ -3,6 +3,8 @@ from datetime import datetime
 
 class Response:
 
+    MAX_DURATION_SECONDS = 180
+
     def __init__(self, timestamp, url, start_at, end_at):
         self.timestamp = timestamp
         self.url = url
@@ -40,12 +42,20 @@ class Response:
 
     def params(self):
 
-        # callback function executed from within yt-dlp https://github.com/yt-dlp/yt-dlp/blob/master/yt_dlp/YoutubeDL.py#L437
-        def download_ranges(_info_dict, _ydl):
+        # https://github.com/yt-dlp/yt-dlp/blob/master/yt_dlp/YoutubeDL.py#L437
+        def download_ranges(*_):
             return [{
                 "start_time": self.to_seconds(self.start_at),
                 "end_time": self.to_seconds(self.end_at)
             }]
+
+        # https://github.com/yt-dlp/yt-dlp/blob/master/yt_dlp/YoutubeDL.py#L402
+        def max_duration(info, *, incomplete):
+            duration = info.get("duration")
+
+            if duration and duration > self.MAX_DURATION_SECONDS:
+                return f"Error: video is longer than {self.MAX_DURATION_SECONDS} seconds"
+
 
         params = {
             "restrictfilenames": True,
@@ -54,7 +64,8 @@ class Response:
                 "home": "./"
             },
             "outtmpl": "%(title)s_%(extractor)s[%(id)s].%(ext)s",
-            "sleep_interval": 0.1
+            "sleep_interval": 0.1,
+            "match_filter": max_duration
         }
 
         if self.has_timestamps():
