@@ -15,8 +15,9 @@ class FormService:
     def build(cls, sheet_id):
         return cls(sheet_id).setup().read()
 
-    def __init__(self, sheet_id):
+    def __init__(self, sheet_id, responses=None):
         self.sheet_id = sheet_id
+        self.responses = responses
 
     def setup(self):
         self.creds, _ = google.auth.default()
@@ -32,7 +33,9 @@ class FormService:
             rows.pop(0)
             rows = list(filter(None, rows))
 
-            self.responses = [ Response(**self.params_for(row)) for row in rows ]
+            responses = [ Response(**self.params_for(row)) for row in rows ]
+            self.responses = [ response for response in responses if response.is_valid() ]
+
         except HttpError as error:
             print(f"An error occurred: {error}")
 
@@ -68,14 +71,3 @@ class FormService:
             return self.service.spreadsheets().values().update(spreadsheetId=self.sheet_id, range=range_name, valueInputOption=self.INPUT_OPTION, body=body).execute()
 
         return row
-
-if __name__ == "__main__":
-    sheet_id = "1oizPnNYIEzSLL6CrjlAMZdySw90jfTJf_2X9SFHejTM"
-
-    fs = FormService.build(sheet_id)
-
-    print(fs.urls())
-
-    # url = "https://www.youtube.com/watch?v=ImUp_Yha3Ls"
-    # fs.update(url)
-

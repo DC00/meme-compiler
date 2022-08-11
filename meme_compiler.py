@@ -1,4 +1,5 @@
-from services import *
+from form_service import *
+from video_service import *
 
 class MemeCompiler:
 
@@ -13,8 +14,8 @@ class MemeCompiler:
         return self
 
     def ingest(self):
-        urls = self.form_service.urls()
-        self.video_service.download(urls)
+        responses = self.form_service.responses
+        self.video_service.download(responses)
 
     def backup(self):
         urls = self.form_service.urls()
@@ -23,6 +24,6 @@ class MemeCompiler:
 if __name__ == "__main__":
     compiler = MemeCompiler.build()
 
-    compiler.backup()
+    compiler.ingest()
 
     # TODO: combine videos with ffmpeg

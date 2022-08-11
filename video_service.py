@@ -1,5 +1,4 @@
 import glob
-from yt_dlp import YoutubeDL
 from google.cloud import storage
 
 
@@ -12,22 +11,13 @@ class VideoService:
         return cls().setup()
 
     def setup(self):
-        params = {
-            "restrictfilenames": True,
-            "format": "bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4]",
-            "paths": {
-                "home": "./"
-            },
-            "outtmpl": "%(title)s_%(extractor)s[%(id)s].%(ext)s"
-        }
-        self.ydl = YoutubeDL(params)
         self.storage = storage.Client()
         self.bucket = self.storage.bucket(self.BUCKET_NAME)
 
         return self
 
-    def download(self, urls):
-        self.ydl.download(urls)
+    def download(self, responses):
+        [ response.download() for response in responses ]
 
         return glob.glob("*.mp4")
 
@@ -42,10 +32,3 @@ class VideoService:
         blob = self.bucket.blob(video)
 
         return False if blob.exists() else (not blob.upload_from_filename(f"./{video}"))
-
-if __name__ == "__main__":
-    vs = VideoService.build()
-
-    URLS = ["https://www.youtube.com/watch?v=BaW_jenozKc"]
-
-    vs.download(URLS)
