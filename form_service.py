@@ -53,7 +53,7 @@ class FormService:
 
     @functools.lru_cache(maxsize=10000)
     def urls(self):
-        return [ response.url for response in self.responses if response.is_valid() ]
+        return [ response.url for response in self.responses ]
 
     def row_of(self, url):
         values = self.urls()
