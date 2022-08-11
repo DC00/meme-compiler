@@ -18,12 +18,12 @@ class MemeCompiler:
         self.video_service.download(responses)
 
     def backup(self):
-        urls = self.form_service.urls()
-        self.video_service.backup(urls)
+        responses = self.form_service.responses
+        self.video_service.backup(responses)
 
 if __name__ == "__main__":
     compiler = MemeCompiler.build()
 
-    compiler.ingest()
+    compiler.backup()
 
     # TODO: combine videos with ffmpeg

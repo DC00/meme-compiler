@@ -21,8 +21,8 @@ class VideoService:
 
         return glob.glob("*.mp4")
 
-    def backup(self, urls):
-        videos = self.download(urls)
+    def backup(self, responses):
+        videos = self.download(responses)
 
         uploaded = [ v for v in videos if self.upload(v) ]
 
