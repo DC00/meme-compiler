@@ -12,50 +12,25 @@ class Response:
         self.end_at = end_at
 
     def is_valid(self):
-        return self.valid_url() and self.valid_timestamps()
-
-    def valid_url(self):
-        return len(self.url) <= 255
-
-    def valid_timestamps(self):
-        if self.has_timestamps():
-            start = self.to_seconds(self.start_at)
-            end = self.to_seconds(self.end_at)
-
-            return (start >= 0 and end > 0) and (start < end)
-
-        return True
-
-    def has_timestamps(self):
-        return bool(self.start_at and self.end_at)
-
-    def to_seconds(self, time):
-        try:
-            date = datetime.strptime(time, "%M:%S")
-
-            minutes, seconds = date.minute, date.second
-
-            return 60 * minutes + seconds
-        except ValueError:
-            return -1
-
+        return self.__valid_url() and self.__valid_timestamps()
 
     def params(self):
 
         # https://github.com/yt-dlp/yt-dlp/blob/master/yt_dlp/YoutubeDL.py#L437
         def download_ranges(*_):
-            return [{
-                "start_time": self.to_seconds(self.start_at),
-                "end_time": self.to_seconds(self.end_at)
-            }]
+            return [{ "start_time": self.__to_seconds(self.start_at), "end_time": self.__to_seconds(self.end_at) }]
 
         # https://github.com/yt-dlp/yt-dlp/blob/master/yt_dlp/YoutubeDL.py#L402
         def max_duration(info, *, incomplete):
             duration = info.get("duration")
 
+            if self.__has_timestamps():
+                if self.__duration() > self.MAX_DURATION_SECONDS:
+                    return f"Error: video is longer than {self.MAX_DURATION_SECONDS} seconds"
+                return None
+
             if duration and duration > self.MAX_DURATION_SECONDS:
                 return f"Error: video is longer than {self.MAX_DURATION_SECONDS} seconds"
-
 
         params = {
             "restrictfilenames": True,
@@ -68,7 +43,7 @@ class Response:
             "match_filter": max_duration
         }
 
-        if self.has_timestamps():
+        if self.__has_timestamps():
             params = params | { "download_ranges": download_ranges }
 
         return params
@@ -77,3 +52,31 @@ class Response:
         downloader = YoutubeDL(self.params())
 
         return downloader.download(self.url)
+
+    def __valid_url(self):
+        return len(self.url) <= 255
+
+    def __valid_timestamps(self):
+        if self.__has_timestamps():
+            start = self.__to_seconds(self.start_at)
+            end = self.__to_seconds(self.end_at)
+
+            return (start >= 0 and end > 0) and (start < end)
+
+        return True
+
+    def __has_timestamps(self):
+        return bool(self.start_at and self.end_at)
+
+    def __to_seconds(self, time):
+        try:
+            date = datetime.strptime(time, "%M:%S")
+
+            minutes, seconds = date.minute, date.second
+
+            return 60 * minutes + seconds
+        except ValueError:
+            return -1
+
+    def __duration(self):
+        return self.__to_seconds(self.end_at) - self.__to_seconds(self.start_at)
