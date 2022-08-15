@@ -1,5 +1,6 @@
 import glob
 from google.cloud import storage
+from adapter import Adapter
 
 
 class VideoService:
@@ -13,11 +14,12 @@ class VideoService:
     def setup(self):
         self.storage = storage.Client()
         self.bucket = self.storage.bucket(self.BUCKET_NAME)
+        self.adapter = Adapter(self.bucket)
 
         return self
 
     def download(self, responses):
-        [ response.download() for response in responses ]
+        [ response.download(self.adapter) for response in responses ]
 
         return glob.glob("*.mp4")
 

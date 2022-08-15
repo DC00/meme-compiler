@@ -1,5 +1,5 @@
-from form_service import *
-from video_service import *
+from form_service import FormService
+from video_service import VideoService
 
 class MemeCompiler:
 
@@ -24,6 +24,6 @@ class MemeCompiler:
 if __name__ == "__main__":
     compiler = MemeCompiler.build()
 
-    compiler.ingest()
+    compiler.backup()
 
     # TODO: combine videos with ffmpeg

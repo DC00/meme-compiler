@@ -1,4 +1,3 @@
-from yt_dlp import YoutubeDL
 from datetime import datetime
 
 class Response:
@@ -33,6 +32,7 @@ class Response:
                 return f"Error: video is longer than {self.MAX_DURATION_SECONDS} seconds"
 
         params = {
+            "mc_url": self.url,
             "restrictfilenames": True,
             "format": "bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4]",
             "paths": {
@@ -48,10 +48,8 @@ class Response:
 
         return params
 
-    def download(self):
-        downloader = YoutubeDL(self.params())
-
-        return downloader.download(self.url)
+    def download(self, adapter):
+        return adapter.download(self.params())
 
     def __valid_url(self):
         return len(self.url) <= 255
