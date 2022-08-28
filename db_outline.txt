@@ -9,7 +9,7 @@ videos
 video_files
     id
     video_id
-    storage_link (gsutil URI for google cloud ex: gs://videos-4a7a2084ee0b4369b5667ce2d01c530d/comed_fyp_meme_fyp_TikTok[7126740032081120555].mp4)
+    storage_link (gsutil URI)
     format (mp4, ...)
 
 responses
@@ -34,7 +34,7 @@ videos {
     id
     platform (youtube, tiktok)
     identifier (platform specific id)
-    storage_link (gsutil URI for google cloud ex: gs://videos-4a7a2084ee0b4369b5667ce2d01c530d/comed_fyp_meme_fyp_TikTok[7126740032081120555].mp4)
+    storage_link (gsutil URI)
     format (mp4, ...)
 }
 
@@ -44,6 +44,3 @@ responses {
     start_time
     end_time
 }
-
-
-videos-4a7a2084ee0b4369b5667ce2d01c530d/99_speed_and_99_quickness_@bussinwtb_via_-matsbjorndal_ig_TikTok[7127292946252287278].mp4
