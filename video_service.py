@@ -1,11 +1,10 @@
 import glob
+import json
 from google.cloud import storage
 from adapter import Adapter
 
 
 class VideoService:
-
-    BUCKET_NAME = "videos-4a7a2084ee0b4369b5667ce2d01c530d"
 
     @classmethod
     def build(cls):
@@ -13,7 +12,12 @@ class VideoService:
 
     def setup(self):
         self.storage = storage.Client()
-        self.bucket = self.storage.bucket(self.BUCKET_NAME)
+
+        with open("config.json", "r") as f:
+            data = json.loads(f.read())
+            self.bucket_name = data["bucket"]
+
+        self.bucket = self.storage.bucket(self.bucket_name)
         self.adapter = Adapter(self.bucket)
 
         return self

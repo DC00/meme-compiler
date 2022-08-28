@@ -18,6 +18,10 @@ https://cloud.google.com/docs/authentication/getting-started#auth-cloud-implicit
 export GOOGLE_APPLICATION_CREDENTIALS='path/to/creds.json'
 ```
 
+### "Service Discovery"
+
+Copy `config.json.skel` to `config.json` and populate the Google Cloud bucket id
+
 ### Environment
 
 Create virtual environment:
