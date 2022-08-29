@@ -16,11 +16,11 @@ class Video:
 
     def format(self):
         try:
-            platform = re.search("(?i)(youtube|tiktok)", self.path)
+            platform = re.search(r"(?i)(youtube|tiktok)", self.path)
             platform = platform.groups()[-1]
             platform = platform.lower()
 
-            identifier = re.search("(?i)(\[)(.*)(\])", self.path)
+            identifier = re.search(r"(?i)(\[)(.*)(\])", self.path)
             identifier = identifier.groups()[1]
 
             return (platform, identifier)

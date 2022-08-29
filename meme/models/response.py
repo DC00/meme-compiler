@@ -11,7 +11,7 @@ class Response:
         self.end_at = end_at
 
     def is_valid(self):
-        return self.__valid_url() and self.__valid_timestamps()
+        return len(self.url) > 0 and self.__valid_url() and self.__valid_timestamps()
 
     def params(self):
 

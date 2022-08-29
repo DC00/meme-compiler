@@ -3,3 +3,4 @@ env/
 creds.json
 config.json
 db_outline.txt
+tests/.pytest_cache

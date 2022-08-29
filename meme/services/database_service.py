@@ -1,7 +1,6 @@
 from google.cloud import firestore
-import re
 
-class DbService:
+class DatabaseService:
 
     PROJECT_ID = "meme-compiler"
     VIDEO_COLLECTION = u"videos"

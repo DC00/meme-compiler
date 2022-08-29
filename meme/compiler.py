@@ -1,9 +1,4 @@
-from services.video import Video
-from services.adapter import Adapter
-from services.form_service import FormService
-from services.video_service import VideoService
-
-class MemeCompiler:
+class Compiler:
 
     @classmethod
     def build(cls):
