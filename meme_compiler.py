@@ -1,5 +1,7 @@
-from form_service import FormService
-from video_service import VideoService
+from services.video import Video
+from services.adapter import Adapter
+from services.form_service import FormService
+from services.video_service import VideoService
 
 class MemeCompiler:
 

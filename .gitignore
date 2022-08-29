@@ -2,3 +2,4 @@ __pycache__/
 env/
 creds.json
 config.json
+db_outline.txt

@@ -1,7 +1,7 @@
 import glob
 import json
 from google.cloud import storage
-from adapter import Adapter
+from services.adapter import Adapter
 
 
 class VideoService:
