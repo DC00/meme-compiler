@@ -11,7 +11,7 @@ class Response:
         self.end_at = end_at
 
     def is_valid(self):
-        return len(self.url) > 0 and self.__valid_url() and self.__valid_timestamps()
+        return self.__valid_url() and self.__valid_timestamps()
 
     def params(self):
 
@@ -52,7 +52,7 @@ class Response:
         return adapter.download(self.params())
 
     def __valid_url(self):
-        return len(self.url) <= 255
+        return len(self.url) > 0 and len(self.url) <= 255
 
     def __valid_timestamps(self):
         if self.__has_timestamps():

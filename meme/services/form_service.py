@@ -1,5 +1,6 @@
 import functools
 import google.auth
+import meme
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
@@ -12,7 +13,7 @@ class FormService:
 
     @classmethod
     def build(cls, sheet_id):
-        return cls(sheet_id).setup().read()
+        return cls(sheet_id).setup()
 
     def __init__(self, sheet_id, responses=None):
         self.sheet_id = sheet_id
@@ -32,7 +33,7 @@ class FormService:
             rows.pop(0)
             rows = list(filter(None, rows))
 
-            responses = [ Response(**self.params_for(row)) for row in rows ]
+            responses = [ meme.Response(**self.params_for(row)) for row in rows ]
             self.responses = [ response for response in responses if response.is_valid() ]
 
         except HttpError as error:
@@ -40,7 +41,7 @@ class FormService:
 
             return error
 
-        return self
+        return self.responses
 
     def params_for(self, row):
         return {

@@ -18,7 +18,12 @@ def youtube_video_with_tiktok():
     return Video.create("tiktok_video_yOuTube[abc123]")
 
 def test_is_valid(valid_video):
+    assert valid_video.is_valid()
+
+def test_platform_parsed(valid_video):
     assert valid_video.platform == "youtube"
+
+def test_identifier_parsed(valid_video):
     assert valid_video.identifier == "dQw4w9WgXcQ"
 
 def test_tiktok_video_with_youtube(tiktok_video_with_youtube):

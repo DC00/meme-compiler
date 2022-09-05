@@ -1,5 +1,6 @@
 import glob
 import json
+import meme
 from google.cloud import storage
 
 class VideoService:
@@ -16,7 +17,7 @@ class VideoService:
             self.bucket_name = data["bucket"]
 
         self.bucket = self.storage.bucket(self.bucket_name)
-        self.adapter = Adapter(self.bucket)
+        self.adapter = meme.Adapter(self.bucket)
 
         return self
 

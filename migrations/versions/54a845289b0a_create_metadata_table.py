@@ -1,8 +1,8 @@
-"""create responses table
+"""create metadata table
 
-Revision ID: 5922ea1c1362
-Revises: c8bb73b72889
-Create Date: 2022-09-04 23:41:46.498062
+Revision ID: 54a845289b0a
+Revises: 5922ea1c1362
+Create Date: 2022-09-05 15:57:12.039971
 
 """
 import sqlalchemy as sa
@@ -15,39 +15,39 @@ from alembic import op
 
 
 # revision identifiers, used by Alembic.
-revision = '5922ea1c1362'
-down_revision = 'c8bb73b72889'
+revision = '54a845289b0a'
+down_revision = '5922ea1c1362'
 branch_labels = None
 depends_on = None
 
 
 def upgrade() -> None:
     op.create_table(
-        "responses",
+        "metadata",
         sa.Column("id", sa.Integer, primary_key=True),
+        sa.Column("response_id", sa.Integer, nullable=False),
         sa.Column("url", sa.VARCHAR(255), nullable=False),
-        sa.Column("video_id", sa.Integer),
-        sa.Column("start_at", sa.VARCHAR(255)),
-        sa.Column("end_at", sa.VARCHAR(255)),
+        sa.Column("platform", sa.VARCHAR(255)),
+        sa.Column("identifier", sa.VARCHAR(255)),
         sa.Column("created_at", sa.TIMESTAMP, nullable=False, server_default=cast(func.current_timestamp(0), DateTime(timezone=False))),
         sa.Column("updated_at", sa.TIMESTAMP, nullable=False, server_default=cast(func.current_timestamp(0), DateTime(timezone=False)), onupdate=cast(func.current_timestamp(0), DateTime(timezone=False)))
     )
 
     op.create_foreign_key(
-        constraint_name="fk_video",
-        source_table="responses",
-        referent_table="videos",
-        local_cols=["video_id"],
+        constraint_name="fk_response",
+        source_table="metadata",
+        referent_table="responses",
+        local_cols=["response_id"],
         remote_cols=["id"],
         ondelete="CASCADE"
     )
 
     op.create_index(
-        "index_responses_on_url",
-        "responses",
-        ["url"],
+        "index_metadata_on_platform_and_identifier",
+        "metadata",
+        ["platform", "identifier"],
         unique=True
     )
 
 def downgrade() -> None:
-    op.drop_table("responses")
+    op.drop_table("metadata")

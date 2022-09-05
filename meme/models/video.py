@@ -9,6 +9,9 @@ class Video:
     def __init__(self, path):
         self.path = path
 
+    def is_valid(self):
+        return self.__valid_path()
+
     def build(self):
         self.platform, self.identifier = self.format()
 
@@ -31,3 +34,6 @@ class Video:
 
     def key(self):
         return f"{self.platform}-{self.identifier}"
+
+    def __valid_path(self):
+        return len(self.path) > 0
