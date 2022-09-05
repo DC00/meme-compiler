@@ -28,3 +28,6 @@ def test_tiktok_video_with_youtube(tiktok_video_with_youtube):
 def test_youtube_video_with_tiktok(youtube_video_with_tiktok):
     assert youtube_video_with_tiktok.platform == "youtube"
     assert youtube_video_with_tiktok.identifier == "abc123"
+
+def test_key(valid_video):
+    assert valid_video.key() == "youtube-dQw4w9WgXcQ"

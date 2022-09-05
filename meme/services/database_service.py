@@ -1,5 +1,3 @@
-from google.cloud import firestore
-
 class DatabaseService:
 
     PROJECT_ID = "meme-compiler"

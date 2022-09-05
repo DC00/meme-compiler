@@ -1,3 +1,4 @@
 {
-    "bucket": ""
+    "bucket": "",
+    "db_uri": ""
 }

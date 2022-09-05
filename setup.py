@@ -13,4 +13,3 @@ setup(
     url="https://github.com/DC00/meme-compiler",
     packages=find_packages(exclude=("tests", "docs"))
 )
-
