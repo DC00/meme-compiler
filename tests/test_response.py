@@ -36,10 +36,10 @@ def no_timestamp_response():
     return Response(**params)
 
 def test_is_valid(valid_response):
-    assert valid_response.is_valid() == True
+    assert valid_response.is_valid()
 
 def test_is_valid_empty(empty_response):
-    assert empty_response.is_valid() == False
+    assert not empty_response.is_valid()
 
 def test_is_valid_no_timestamp(no_timestamp_response):
-    assert no_timestamp_response.is_valid() == True
+    assert no_timestamp_response.is_valid()

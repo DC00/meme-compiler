@@ -17,10 +17,3 @@ class Compiler:
     def backup(self):
         responses = self.form_service.responses
         self.video_service.backup(responses)
-
-if __name__ == "__main__":
-    compiler = MemeCompiler.build()
-
-    compiler.backup()
-
-    # TODO: combine videos with ffmpeg
