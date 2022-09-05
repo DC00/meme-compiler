@@ -20,7 +20,7 @@ export GOOGLE_APPLICATION_CREDENTIALS='path/to/creds.json'
 
 ### "Service Discovery"
 
-Copy `config.json.skel` to `config.json` and populate the Google Cloud bucket id
+Copy `config.json.skel` to `config.json`. Populate the Google Cloud bucket id and Heroku Postgres uri connection string
 
 ### Environment
 
@@ -44,6 +44,23 @@ Validate python version
 python -V
 > Python 3.9.13
 ```
+
+## Database
+
+Heroku Hobby-dev PostgreSQL (need to upgrade by [November 28, 2022](https://help.heroku.com/RSBRUH58/removal-of-heroku-free-product-plans-faq))
+
+Using [Alembic](https://alembic.sqlalchemy.org/en/latest/index.html) for db versioning
+
+### Apply database migrations
+```
+alembic upgrade head
+```
+
+### Revert database migrations
+```
+alembic downgrade -1
+```
+
 
 ## Usage
 
