@@ -1,6 +1,6 @@
 from yt_dlp import YoutubeDL
 
-class Adapter:
+class VideoAdapter:
 
     def __init__(self, bucket):
         self.bucket = bucket
@@ -18,10 +18,3 @@ class Adapter:
             print(f"MEME_COMPILER:INFO:{filename} already in google cloud")
 
         return [ downloader.download(params["mc_url"]) if not blob.exists() else None ]
-
-    def info(self, params):
-        downloader = YoutubeDL(params)
-
-        info = downloader.extract_info(params["mc_url"], download=False)
-
-        pass

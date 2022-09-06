@@ -1,4 +1,4 @@
-class Video:
+class Metadata:
 
     PLATFORMS = ["youtube", "tiktok"]
 
@@ -7,13 +7,15 @@ class Video:
         return cls(params)
 
     def __init__(self, params):
-        self.id           = params.get("id")
-        self.platform     = params.get("platform")
-        self.identifier   = params.get("identifier")
-        self.storage_link = params.get("storage_link")
-        self.format       = params.get("format")
-        self.created_at   = params.get("created_at")
-        self.updated_at   = params.get("updated_at")
+        self.id          = params.get("id")
+        self.response_id = params.get("response_id")
+        self.video_id    = params.get("video_id")
+        self.url         = params.get("url")
+        self.platform    = params.get("platform")
+        self.identifier  = params.get("identifier")
+        self.filename    = params.get("filename")
+        self.created_at  = params.get("created_at")
+        self.updated_at  = params.get("updated_at")
 
     def is_valid(self):
         return self.__valid_platform() and self.__valid_identifier()

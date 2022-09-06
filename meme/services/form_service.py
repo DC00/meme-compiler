@@ -33,7 +33,7 @@ class FormService:
             rows.pop(0)
             rows = list(filter(None, rows))
 
-            responses = [ meme.Response(**self.params_for(row)) for row in rows ]
+            responses = [ meme.Response(self.params_for(row)) for row in rows ]
             self.responses = [ response for response in responses if response.is_valid() ]
 
         except HttpError as error:

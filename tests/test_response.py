@@ -11,7 +11,7 @@ def valid_response():
         "start_at": "00:00",
         "end_at": "00:10"
     }
-    return Response(**params)
+    return Response(params)
 
 @pytest.fixture
 def empty_response():
@@ -22,7 +22,7 @@ def empty_response():
         "start_at": "",
         "end_at": ""
     }
-    return Response(**params)
+    return Response(params)
 
 @pytest.fixture
 def no_timestamp_response():
@@ -33,7 +33,7 @@ def no_timestamp_response():
         "start_at": "",
         "end_at": ""
     }
-    return Response(**params)
+    return Response(params)
 
 def test_is_valid(valid_response):
     assert valid_response.is_valid()

@@ -26,9 +26,11 @@ def upgrade() -> None:
         "metadata",
         sa.Column("id", sa.Integer, primary_key=True),
         sa.Column("response_id", sa.Integer, nullable=False),
+        sa.Column("video_id", sa.Integer, nullable=False),
         sa.Column("url", sa.VARCHAR(255), nullable=False),
-        sa.Column("platform", sa.VARCHAR(255)),
-        sa.Column("identifier", sa.VARCHAR(255)),
+        sa.Column("platform", sa.VARCHAR(255), nullable=False),
+        sa.Column("identifier", sa.VARCHAR(255), nullable=False),
+        sa.Column("filename", sa.VARCHAR(255)),
         sa.Column("created_at", sa.TIMESTAMP, nullable=False, server_default=cast(func.current_timestamp(0), DateTime(timezone=False))),
         sa.Column("updated_at", sa.TIMESTAMP, nullable=False, server_default=cast(func.current_timestamp(0), DateTime(timezone=False)), onupdate=cast(func.current_timestamp(0), DateTime(timezone=False)))
     )
@@ -38,6 +40,15 @@ def upgrade() -> None:
         source_table="metadata",
         referent_table="responses",
         local_cols=["response_id"],
+        remote_cols=["id"],
+        ondelete="CASCADE"
+    )
+
+    op.create_foreign_key(
+        constraint_name="fk_video",
+        source_table="metadata",
+        referent_table="videos",
+        local_cols=["video_id"],
         remote_cols=["id"],
         ondelete="CASCADE"
     )

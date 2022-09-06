@@ -17,7 +17,7 @@ class VideoService:
             self.bucket_name = data["bucket"]
 
         self.bucket = self.storage.bucket(self.bucket_name)
-        self.adapter = meme.Adapter(self.bucket)
+        self.adapter = meme.VideoAdapter(self.bucket)
 
         return self
 

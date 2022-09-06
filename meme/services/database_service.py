@@ -1,9 +1,10 @@
 import psycopg2
 import json
+import meme
 
 from contextlib import contextmanager
 from psycopg2 import extras
-from psycopg2 import sql
+from psycopg2.extras import RealDictCursor
 
 class DatabaseService:
 
@@ -38,49 +39,49 @@ class DatabaseService:
     def add_responses(self, responses=[]):
         responses = [ (r.url, r.start_at, r.end_at) for r in responses if r.is_valid() ]
 
-        query = Queries.insert_responses()
+        query = meme.Queries.insert_responses()
 
         with self.connection() as conn:
             cursor = conn.cursor()
             # https://www.psycopg.org/docs/extras.html#fast-execution-helpers ???
             extras.execute_values(cursor, query.as_string(conn), responses)
 
+    def get_responses(self):
+        query = meme.Queries.select_responses()
+
+        with self.connection() as conn:
+            cursor = conn.cursor(cursor_factory=RealDictCursor)
+            cursor.execute(query)
+            results = cursor.fetchall()
+
+        return [ meme.Response(dict(result)) for result in results ]
+
     def add_videos(self, videos=[]):
         videos = [ (v.platform, v.identifier) for v in videos if v.is_valid() ]
 
-        query = Queries.insert_videos()
+        query = meme.Queries.insert_videos()
 
         with self.connection() as conn:
             cursor = conn.cursor()
             # https://www.psycopg.org/docs/extras.html#fast-execution-helpers ???
             extras.execute_values(cursor, query.as_string(conn), videos)
 
-class Queries:
+    def add_metadata(self, metadata=[]):
+        metadata = [ (m.response_id, m.url, m.platform, m.identifier, m.filename) for m in metadata if m.is_valid() ]
 
-    @classmethod
-    def insert_responses(cls):
-        return sql.SQL(
-            """
-            INSERT INTO {table} ({fields}) VALUES %s
-            ON CONFLICT ({index})
-                DO UPDATE SET updated_at = now()::timestamp(0)
-            """
-        ).format(
-            table=sql.Identifier("responses"),
-            fields=sql.SQL(", ").join(map(sql.Identifier, ["url", "start_at", "end_at"])),
-            index=sql.Identifier("url")
-        )
+        query = meme.Queries.insert_metadata()
 
-    @classmethod
-    def insert_videos(cls):
-        return sql.SQL(
-            """
-            INSERT INTO {table} ({fields}) VALUES %s
-            ON CONFLICT ({fields})
-                DO UPDATE SET updated_at = now()::timestamp(0)
-            """
-        ).format(
-            table=sql.Identifier("videos"),
-            fields=sql.SQL(", ").join(map(sql.Identifier, ["platform", "identifier"])),
-        )
+        with self.connection() as conn:
+            cursor = conn.cursor()
+            # https://www.psycopg.org/docs/extras.html#fast-execution-helpers ???
+            extras.execute_values(cursor, query.as_string(conn), metadata)
 
+    def metadata_exists(self, metadata):
+        query = meme.Queries.metadata_exists()
+
+        with self.connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(query, [metadata.platform, metadata.identifier])
+            result = cursor.fetchone()
+
+        return result[0]

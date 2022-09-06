@@ -4,11 +4,18 @@ class Response:
 
     MAX_DURATION_SECONDS = 180
 
-    def __init__(self, timestamp, url, start_at, end_at):
-        self.timestamp = timestamp
-        self.url = url
-        self.start_at = start_at
-        self.end_at = end_at
+    def __init__(self, params):
+        self.id         = params.get("id")
+        self.url        = params.get("url")
+        self.video_id   = params.get("video_id")
+        self.start_at   = params.get("start_at")
+        self.end_at     = params.get("end_at")
+        self.entered_at = params.get("entered_at")
+        self.created_at = params.get("created_at")
+        self.updated_at = params.get("updated_at")
+
+    def __repr__(self):
+        return f"({self.url}, {self.start_at}, {self.end_at})"
 
     def is_valid(self):
         return self.__valid_url() and self.__valid_timestamps()
@@ -50,6 +57,9 @@ class Response:
 
     def download(self, adapter):
         return adapter.download(self.params())
+
+    def metadata(self, adapter):
+        return adapter.metadata(self.params())
 
     def __valid_url(self):
         return len(self.url) > 0 and len(self.url) <= 255
