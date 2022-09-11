@@ -8,7 +8,6 @@ Create Date: 2022-09-05 15:57:12.039971
 import sqlalchemy as sa
 
 from sqlalchemy import func
-from sqlalchemy import DateTime
 from sqlalchemy import cast
 
 from alembic import op
@@ -31,8 +30,8 @@ def upgrade() -> None:
         sa.Column("platform", sa.VARCHAR(255), nullable=False),
         sa.Column("identifier", sa.VARCHAR(255), nullable=False),
         sa.Column("filename", sa.VARCHAR(255)),
-        sa.Column("created_at", sa.TIMESTAMP, nullable=False, server_default=cast(func.current_timestamp(0), DateTime(timezone=False))),
-        sa.Column("updated_at", sa.TIMESTAMP, nullable=False, server_default=cast(func.current_timestamp(0), DateTime(timezone=False)), onupdate=cast(func.current_timestamp(0), DateTime(timezone=False)))
+        sa.Column("created_at", sa.TIMESTAMP, nullable=False, server_default=cast(func.current_timestamp(0), sa.DateTime(timezone=False))),
+        sa.Column("updated_at", sa.TIMESTAMP, nullable=False, server_default=cast(func.current_timestamp(0), sa.DateTime(timezone=False)), onupdate=cast(func.current_timestamp(0), sa.DateTime(timezone=False)))
     )
 
     op.create_foreign_key(
@@ -41,7 +40,7 @@ def upgrade() -> None:
         referent_table="responses",
         local_cols=["response_id"],
         remote_cols=["id"],
-        ondelete="CASCADE"
+        ondelete="SET NULL"
     )
 
     op.create_foreign_key(

@@ -1,21 +1,31 @@
+import sqlalchemy as sa
+
+from sqlalchemy import func
+from sqlalchemy import cast
+
+from sqlalchemy.orm import declarative_base
+
 from datetime import datetime
 
-class Response:
+Base = declarative_base()
+
+class Response(Base):
+
+    __tablename__ = "responses"
+
+    id         = sa.Column("id", sa.Integer, primary_key=True)
+    url        = sa.Column("url", sa.VARCHAR(255), nullable=False)
+    video_id   = sa.Column("video_id", sa.Integer)
+    start_at   = sa.Column("start_at", sa.VARCHAR(255))
+    end_at     = sa.Column("end_at", sa.VARCHAR(255))
+    entered_at = sa.Column("entered_at", sa.TIMESTAMP)
+    created_at = sa.Column("created_at", sa.TIMESTAMP, nullable=False, server_default=cast(func.current_timestamp(0), sa.DateTime(timezone=False)))
+    updated_at = sa.Column("updated_at", sa.TIMESTAMP, nullable=False, server_default=cast(func.current_timestamp(0), sa.DateTime(timezone=False)), onupdate=cast(func.current_timestamp(0), sa.DateTime(timezone=False)))
 
     MAX_DURATION_SECONDS = 180
 
-    def __init__(self, params):
-        self.id         = params.get("id")
-        self.url        = params.get("url")
-        self.video_id   = params.get("video_id")
-        self.start_at   = params.get("start_at")
-        self.end_at     = params.get("end_at")
-        self.entered_at = params.get("entered_at")
-        self.created_at = params.get("created_at")
-        self.updated_at = params.get("updated_at")
-
     def __repr__(self):
-        return f"({self.url}, {self.start_at}, {self.end_at})"
+        return f"Response(id={self.id}, url={self.url}, video_id={self.video_id}, start_at={self.start_at}, end_at={self.end_at}, entered_at={self.entered_at}, created_at={self.created_at}, updated_at={self.updated_at})"
 
     def is_valid(self):
         return self.__valid_url() and self.__valid_timestamps()

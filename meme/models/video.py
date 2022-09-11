@@ -1,19 +1,28 @@
-class Video:
+import sqlalchemy as sa
+
+from sqlalchemy import func
+from sqlalchemy import cast
+
+from sqlalchemy.orm import declarative_base
+
+Base = declarative_base()
+
+class Video(Base):
+
+    __tablename__ = "videos"
+
+    id           = sa.Column("id", sa.Integer, primary_key=True)
+    platform     = sa.Column("platform", sa.VARCHAR(255), nullable=False)
+    identifier   = sa.Column("identifier", sa.VARCHAR(255), nullable=False)
+    storage_link = sa.Column("storage_link", sa.VARCHAR(255))
+    format       = sa.Column("format", sa.VARCHAR(255))
+    created_at   = sa.Column("created_at", sa.TIMESTAMP, nullable=False, server_default=cast(func.current_timestamp(0), sa.DateTime(timezone=False)))
+    updated_at   = sa.Column("updated_at", sa.TIMESTAMP, nullable=False, server_default=cast(func.current_timestamp(0), sa.DateTime(timezone=False)), onupdate=cast(func.current_timestamp(0), sa.DateTime(timezone=False)))
 
     PLATFORMS = ["youtube", "tiktok"]
 
-    @classmethod
-    def create(cls, params):
-        return cls(params)
-
-    def __init__(self, params):
-        self.id           = params.get("id")
-        self.platform     = params.get("platform")
-        self.identifier   = params.get("identifier")
-        self.storage_link = params.get("storage_link")
-        self.format       = params.get("format")
-        self.created_at   = params.get("created_at")
-        self.updated_at   = params.get("updated_at")
+    def __repr__(self):
+        return f"Video(id={self.id}, platform={self.platform}, identifier={self.identifier}, storage_link={self.storage_link}, format={self.format})"
 
     def is_valid(self):
         return self.__valid_platform() and self.__valid_identifier()

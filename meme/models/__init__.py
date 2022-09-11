@@ -1,4 +1,3 @@
-from .response import Response
-from .video import Video
-from .metadata import Metadata
-from .serializer import Serializer
+from .response import Response, Base
+from .video import Video, Base
+from .metadata import Metadata, Base

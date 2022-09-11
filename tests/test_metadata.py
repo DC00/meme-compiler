@@ -5,12 +5,12 @@ from .context import Metadata
 @pytest.fixture
 def valid_metadata():
     '''Returns a valid metadata object'''
-    return Metadata.create({ "platform": "youtube", "identifier": "dQw4w9WgXcQ", "filename": "watch_me_Youtube[dQw4w9WgXcQ]" })
+    return Metadata(platform="youtube", identifier="dQw4w9WgXcQ", filename="watch_me_Youtube[dQw4w9WgXcQ]")
 
 @pytest.fixture
 def invalid_metadata():
     '''Returns an invalid metadata object'''
-    return Metadata.create({ "platform": "crunchyroll", "identifier": "342342", "filename": "weebcity[342342]" })
+    return Metadata(platform="crunchyroll", identifier="342342", filename="weebcity[342342]")
 
 def test_is_valid(valid_metadata):
     assert valid_metadata.is_valid()

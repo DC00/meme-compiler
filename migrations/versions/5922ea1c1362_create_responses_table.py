@@ -8,7 +8,6 @@ Create Date: 2022-09-04 23:41:46.498062
 import sqlalchemy as sa
 
 from sqlalchemy import func
-from sqlalchemy import DateTime
 from sqlalchemy import cast
 
 from alembic import op
@@ -30,8 +29,8 @@ def upgrade() -> None:
         sa.Column("start_at", sa.VARCHAR(255)),
         sa.Column("end_at", sa.VARCHAR(255)),
         sa.Column("entered_at", sa.TIMESTAMP),
-        sa.Column("created_at", sa.TIMESTAMP, nullable=False, server_default=cast(func.current_timestamp(0), DateTime(timezone=False))),
-        sa.Column("updated_at", sa.TIMESTAMP, nullable=False, server_default=cast(func.current_timestamp(0), DateTime(timezone=False)), onupdate=cast(func.current_timestamp(0), DateTime(timezone=False)))
+        sa.Column("created_at", sa.TIMESTAMP, nullable=False, server_default=cast(func.current_timestamp(0), sa.DateTime(timezone=False))),
+        sa.Column("updated_at", sa.TIMESTAMP, nullable=False, server_default=cast(func.current_timestamp(0), sa.DateTime(timezone=False)), onupdate=cast(func.current_timestamp(0), sa.DateTime(timezone=False)))
     )
 
     op.create_foreign_key(
