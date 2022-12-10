@@ -21,10 +21,6 @@ Copy sample config file to `config.json` and populate with necessary values
 cp config.json.skel config.json
 ```
 
-### "Service Discovery"
-
-Copy `config.json.skel` to `config.json`. Populate the Google Cloud bucket id and Heroku Postgres uri connection string
-
 ### Environment
 
 Create virtual environment:
