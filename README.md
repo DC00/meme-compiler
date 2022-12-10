@@ -4,8 +4,6 @@ Generates a compilation video from submitted video urls
 
 ## Setup
 
-### Google Auth Creds
-
 https://cloud.google.com/docs/authentication/getting-started#auth-cloud-implicit-python
 
 - Go to google cloud console: https://console.cloud.google.com
@@ -16,6 +14,11 @@ https://cloud.google.com/docs/authentication/getting-started#auth-cloud-implicit
 - Add to environment variable:
 ```
 export GOOGLE_APPLICATION_CREDENTIALS='path/to/creds.json'
+```
+
+Copy sample config file to `config.json` and populate with necessary values
+```
+cp config.json.skel config.json
 ```
 
 ### "Service Discovery"
@@ -45,14 +48,6 @@ python -V
 > Python 3.9.13
 ```
 
-### Setup
-
-Copy sample config file to `config.json` and populate with necessary values
-```
-cp config.json.skel config.json
-```
-
-
 ## Usage
 
 #### Download videos into current directory
@@ -71,12 +66,6 @@ from meme import *
 compiler = Compiler.build()
 compiler.ingest(10)
 ```
-
-### Running tests
-```
-pytest
-```
-
 
 ### YT-DLP
 
@@ -113,6 +102,11 @@ params = {
 `download_ranges` | callback function which specifies time range to download
 `ext`| file extension
 
+
+## Running tests
+```
+pytest
+```
 
 
 ## Database (TODO, not working right now)
