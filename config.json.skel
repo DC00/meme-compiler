@@ -1,4 +1,9 @@
 {
     "bucket": "",
-    "db_uri": ""
+    "sheet_id": "",
+    "db_uri": "",
+    "dbname": "",
+    "dbuser": "",
+    "dbpassword": "",
+    "dbhost": ""
 }

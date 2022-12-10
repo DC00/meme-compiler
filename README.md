@@ -45,20 +45,11 @@ python -V
 > Python 3.9.13
 ```
 
-## Database
+### Setup
 
-Heroku Hobby-dev PostgreSQL (need to upgrade by [November 28, 2022](https://help.heroku.com/RSBRUH58/removal-of-heroku-free-product-plans-faq))
-
-Using [Alembic](https://alembic.sqlalchemy.org/en/latest/index.html) for db versioning
-
-### Apply database migrations
+Copy sample config file to `config.json` and populate with necessary values
 ```
-alembic upgrade head
-```
-
-### Revert database migrations
-```
-alembic downgrade -1
+cp config.json.skel config.json
 ```
 
 
@@ -67,14 +58,23 @@ alembic downgrade -1
 #### Download videos into current directory
 
 ```
-compiler = MemeCompiler.build()
-compiler.ingest()
+from meme import *
+
+compiler = Compiler.build()
+compiler.download(10)
 ```
 
 #### Backup videos to Google Storage
 ```
-compiler = MemeCompiler.build()
-compiler.backup()
+from meme import *
+
+compiler = Compiler.build()
+compiler.ingest(10)
+```
+
+### Running tests
+```
+pytest
 ```
 
 
@@ -112,3 +112,21 @@ params = {
 `match_filter` | duration check function called for each downloaded video
 `download_ranges` | callback function which specifies time range to download
 `ext`| file extension
+
+
+
+## Database (TODO, not working right now)
+
+Heroku Hobby-dev PostgreSQL (need to upgrade by [November 28, 2022](https://help.heroku.com/RSBRUH58/removal-of-heroku-free-product-plans-faq))
+
+Using [Alembic](https://alembic.sqlalchemy.org/en/latest/index.html) for db versioning
+
+### Apply database migrations
+```
+alembic upgrade head
+```
+
+### Revert database migrations
+```
+alembic downgrade -1
+```

@@ -1,6 +1,7 @@
+import meme
 import functools
 import google.auth
-import meme
+import json
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
@@ -8,26 +9,31 @@ class FormService:
 
     SHEET_OFFSET = 2
     COMPLETED_NOTE = "processed"
-    CELL_RANGE = "'Form Responses 1'"
+    SHEET = "'Form Responses 1'"
     INPUT_OPTION = "USER_ENTERED"
 
     @classmethod
-    def build(cls, sheet_id):
-        return cls(sheet_id).setup()
+    def build(cls):
+        return cls().setup()
 
-    def __init__(self, sheet_id, responses=None):
-        self.sheet_id = sheet_id
-        self.responses = responses
+    def __init__(self):
+        pass
 
     def setup(self):
+        with open("config.json", "r") as f:
+            data = json.loads(f.read())
+            self.sheet_id = data["sheet_id"]
+
         self.creds, _ = google.auth.default()
         self.service = build("sheets", "v4", credentials=self.creds)
 
         return self
 
-    def read(self):
+    def read(self, limit=10):
         try:
-            result = self.service.spreadsheets().values().get(spreadsheetId=self.sheet_id, range=self.CELL_RANGE).execute()
+            download_range = self.SHEET + f"!1:{limit}"
+
+            result = self.service.spreadsheets().values().get(spreadsheetId=self.sheet_id, range=download_range).execute()
 
             rows = result.get("values", [])
             rows.pop(0)

@@ -1,5 +1,7 @@
 from yt_dlp import YoutubeDL
+from urllib.error import HTTPError
 
+# used for downloading each video
 class VideoAdapter:
 
     def __init__(self, bucket):
@@ -8,7 +10,11 @@ class VideoAdapter:
     def download(self, params):
         downloader = YoutubeDL(params)
 
-        info = downloader.extract_info(params["mc_url"], download=False)
+        try:
+            info = downloader.extract_info(params["mc_url"], download=False)
+        except:
+            print(f"MEME_COMPILER:INFO: Error when downloading video")
+            return
 
         filename = downloader._prepare_filename(info)
 

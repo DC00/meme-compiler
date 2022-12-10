@@ -1,31 +1,44 @@
-import sqlalchemy as sa
+# import sqlalchemy as sa
 
-from sqlalchemy import func
-from sqlalchemy import cast
+# from sqlalchemy import func
+# from sqlalchemy import cast
 
-from sqlalchemy.orm import declarative_base
+# from sqlalchemy.orm import declarative_base
+
+# from datetime import datetime
+
+# Base = declarative_base()
+
+# class Response(Base):
+
+#     __tablename__ = "responses"
+
+#     id         = sa.Column("id", sa.Integer, primary_key=True)
+#     url        = sa.Column("url", sa.VARCHAR(255), nullable=False)
+#     video_id   = sa.Column("video_id", sa.Integer)
+#     start_at   = sa.Column("start_at", sa.VARCHAR(255))
+#     end_at     = sa.Column("end_at", sa.VARCHAR(255))
+#     entered_at = sa.Column("entered_at", sa.TIMESTAMP)
+#     created_at = sa.Column("created_at", sa.TIMESTAMP, nullable=False, server_default=cast(func.current_timestamp(0), sa.DateTime(timezone=False)))
+#     updated_at = sa.Column("updated_at", sa.TIMESTAMP, nullable=False, server_default=cast(func.current_timestamp(0), sa.DateTime(timezone=False)), onupdate=cast(func.current_timestamp(0), sa.DateTime(timezone=False)))
+#
+#     def __repr__(self):
+#        return f"Response(id={self.id}, url={self.url}, video_id={self.video_id}, start_at={self.start_at}, end_at={self.end_at}, entered_at={self.entered_at}, created_at={self.created_at}, updated_at={self.updated_at})"
 
 from datetime import datetime
 
-Base = declarative_base()
-
-class Response(Base):
-
-    __tablename__ = "responses"
-
-    id         = sa.Column("id", sa.Integer, primary_key=True)
-    url        = sa.Column("url", sa.VARCHAR(255), nullable=False)
-    video_id   = sa.Column("video_id", sa.Integer)
-    start_at   = sa.Column("start_at", sa.VARCHAR(255))
-    end_at     = sa.Column("end_at", sa.VARCHAR(255))
-    entered_at = sa.Column("entered_at", sa.TIMESTAMP)
-    created_at = sa.Column("created_at", sa.TIMESTAMP, nullable=False, server_default=cast(func.current_timestamp(0), sa.DateTime(timezone=False)))
-    updated_at = sa.Column("updated_at", sa.TIMESTAMP, nullable=False, server_default=cast(func.current_timestamp(0), sa.DateTime(timezone=False)), onupdate=cast(func.current_timestamp(0), sa.DateTime(timezone=False)))
+class Response:
 
     MAX_DURATION_SECONDS = 180
 
+    def __init__(self, params):
+        self.url = params["url"]
+        self.timestamp = params["timestamp"]
+        self.start_at = params["start_at"]
+        self.end_at = params["end_at"]
+
     def __repr__(self):
-        return f"Response(id={self.id}, url={self.url}, video_id={self.video_id}, start_at={self.start_at}, end_at={self.end_at}, entered_at={self.entered_at}, created_at={self.created_at}, updated_at={self.updated_at})"
+        return f"Response(timestamp={self.timestamp}, url={self.url}, start_at={self.start_at}, end_at={self.end_at}"
 
     def is_valid(self):
         return self.__valid_url() and self.__valid_timestamps()
