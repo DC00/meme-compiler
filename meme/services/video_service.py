@@ -6,8 +6,11 @@ from google.cloud import storage
 class VideoService:
 
     @classmethod
-    def build(cls):
-        return cls().setup()
+    def build(cls, **params):
+        return cls(params).setup()
+
+    def __init__(self, params):
+        self.force = params["force"]
 
     def setup(self):
         self.storage = storage.Client()
@@ -17,7 +20,7 @@ class VideoService:
             self.bucket_name = data["bucket"]
 
         self.bucket = self.storage.bucket(self.bucket_name)
-        self.adapter = meme.VideoAdapter(self.bucket)
+        self.adapter = meme.VideoAdapter(self.bucket, self.force)
 
         return self
 

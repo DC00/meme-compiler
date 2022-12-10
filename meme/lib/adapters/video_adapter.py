@@ -4,8 +4,9 @@ from urllib.error import HTTPError
 # used for downloading each video
 class VideoAdapter:
 
-    def __init__(self, bucket):
+    def __init__(self, bucket, force):
         self.bucket = bucket
+        self.force = force
 
     def download(self, params):
         downloader = YoutubeDL(params)
@@ -20,7 +21,7 @@ class VideoAdapter:
 
         blob = self.bucket.blob(filename)
 
-        if blob.exists():
+        if not self.force and blob.exists():
             print(f"MEME_COMPILER:INFO:{filename} already in google cloud")
 
-        return [ downloader.download(params["mc_url"]) if not blob.exists() else None ]
+        return [ downloader.download(params["mc_url"]) if self.force or not blob.exists() else None ]

@@ -31,7 +31,7 @@ class FormService:
 
     def read(self, limit=10):
         try:
-            download_range = self.SHEET + f"!1:{limit}"
+            download_range = self.SHEET + f"!1:{limit + 1}"
 
             result = self.service.spreadsheets().values().get(spreadsheetId=self.sheet_id, range=download_range).execute()
 

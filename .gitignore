@@ -3,3 +3,5 @@ env/
 creds.json
 config.json
 tests/.pytest_cache
+.pdbrc
+
