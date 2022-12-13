@@ -1,30 +1,3 @@
-# import sqlalchemy as sa
-
-# from sqlalchemy import func
-# from sqlalchemy import cast
-
-# from sqlalchemy.orm import declarative_base
-
-# from datetime import datetime
-
-# Base = declarative_base()
-
-# class Response(Base):
-
-#     __tablename__ = "responses"
-
-#     id         = sa.Column("id", sa.Integer, primary_key=True)
-#     url        = sa.Column("url", sa.VARCHAR(255), nullable=False)
-#     video_id   = sa.Column("video_id", sa.Integer)
-#     start_at   = sa.Column("start_at", sa.VARCHAR(255))
-#     end_at     = sa.Column("end_at", sa.VARCHAR(255))
-#     entered_at = sa.Column("entered_at", sa.TIMESTAMP)
-#     created_at = sa.Column("created_at", sa.TIMESTAMP, nullable=False, server_default=cast(func.current_timestamp(0), sa.DateTime(timezone=False)))
-#     updated_at = sa.Column("updated_at", sa.TIMESTAMP, nullable=False, server_default=cast(func.current_timestamp(0), sa.DateTime(timezone=False)), onupdate=cast(func.current_timestamp(0), sa.DateTime(timezone=False)))
-#
-#     def __repr__(self):
-#        return f"Response(id={self.id}, url={self.url}, video_id={self.video_id}, start_at={self.start_at}, end_at={self.end_at}, entered_at={self.entered_at}, created_at={self.created_at}, updated_at={self.updated_at})"
-
 from datetime import datetime
 
 class Response:
@@ -45,11 +18,9 @@ class Response:
 
     def params(self):
 
-        # https://github.com/yt-dlp/yt-dlp/blob/master/yt_dlp/YoutubeDL.py#L437
         def download_ranges(*_):
             return [{ "start_time": self.__to_seconds(self.start_at), "end_time": self.__to_seconds(self.end_at) }]
 
-        # https://github.com/yt-dlp/yt-dlp/blob/master/yt_dlp/YoutubeDL.py#L402
         def max_duration(info, *, incomplete):
             duration = info.get("duration")
 
@@ -80,9 +51,6 @@ class Response:
 
     def download(self, adapter):
         return adapter.download(self.params())
-
-    def metadata(self, adapter):
-        return adapter.metadata(self.params())
 
     def __valid_url(self):
         return len(self.url) > 0 and len(self.url) <= 255

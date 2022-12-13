@@ -5,7 +5,7 @@ from meme import Metadata
 # will not download the video itself
 class MetadataAdapter:
 
-    def metadata(self, params):
+    def download(self, params):
         downloader = YoutubeDL(params)
 
         info = downloader.extract_info(params["mc_url"], download=False)
