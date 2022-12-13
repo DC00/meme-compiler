@@ -3,7 +3,8 @@ import glob
 
 from google.cloud import storage
 
-import meme
+
+from meme.lib import VideoAdapter
 
 class VideoService:
 
@@ -22,7 +23,7 @@ class VideoService:
             self.bucket_name = data["bucket"]
 
         self.bucket = self.storage.bucket(self.bucket_name)
-        self.adapter = meme.VideoAdapter(self.bucket, self.force)
+        self.adapter = VideoAdapter(self.bucket, self.force)
 
         return self
 

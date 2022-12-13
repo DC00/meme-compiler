@@ -1,2 +1,2 @@
-from .form_service import FormService
-from .video_service import VideoService
+from meme.services.form_service import FormService
+from meme.services.video_service import VideoService

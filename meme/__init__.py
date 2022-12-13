@@ -1,6 +1,11 @@
-from .models import *
-from .services import *
-from .lib import *
-from .lib.adapters import *
+from meme.models import Metadata
+from meme.models import Response
+from meme.models import Video
 
-from .compiler import Compiler
+from meme.services import FormService
+from meme.services import VideoService
+
+from meme.lib.adapters import MetadataAdapter
+from meme.lib.adapters import VideoAdapter
+
+from meme.compiler import Compiler

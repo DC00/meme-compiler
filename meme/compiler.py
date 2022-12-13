@@ -1,4 +1,5 @@
-import meme
+from meme.services import FormService
+from meme.services import VideoService
 
 class Compiler:
 
@@ -7,8 +8,8 @@ class Compiler:
         return cls().setup()
 
     def setup(self):
-        self.form_service = meme.FormService.build()
-        self.video_service = meme.VideoService.build(force=True)
+        self.form_service = FormService.build()
+        self.video_service = VideoService.build(force=True)
 
         return self
 
