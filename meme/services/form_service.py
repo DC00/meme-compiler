@@ -1,9 +1,11 @@
-import meme
 import functools
-import google.auth
 import json
+
+import google.auth
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+
+import meme
 
 class FormService:
 

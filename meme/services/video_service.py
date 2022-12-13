@@ -1,7 +1,9 @@
-import glob
 import json
-import meme
+import glob
+
 from google.cloud import storage
+
+import meme
 
 class VideoService:
 

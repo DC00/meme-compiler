@@ -1,4 +1,5 @@
 from yt_dlp import YoutubeDL
+
 from meme import Metadata
 
 # Used for getting the metadata of each video

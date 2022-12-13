@@ -1,5 +1,4 @@
 from yt_dlp import YoutubeDL
-from urllib.error import HTTPError
 
 # used for downloading each video
 class VideoAdapter:
@@ -21,7 +20,7 @@ class VideoAdapter:
 
         blob = self.bucket.blob(filename)
 
-        if not self.force and blob.exists():
+        if self.force is not True and blob.exists():
             print(f"MEME_COMPILER:INFO:{filename} already in google cloud")
 
-        return [ downloader.download(params["mc_url"]) if self.force or not blob.exists() else None ]
+        return [ downloader.download(params["mc_url"]) if self.force or blob.exists() is not True else None ]
