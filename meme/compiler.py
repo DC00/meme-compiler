@@ -14,11 +14,18 @@ class Compiler:
         return self
 
     def ingest(self, limit=10):
-        responses = self.form_service.read(limit)
+        responses = self.form_service.read()
 
-        self.video_service.backup(responses)
+        metadata = self.video_service.ingest(responses[0:limit])
+
+        self.form_service.ingest(metadata)
+
+    def store(self, limit=10):
+        responses = self.form_service.read()
+
+        self.video_service.store(responses[0:limit])
 
     def download(self, limit=10):
-        responses = self.form_service.read(limit)
+        responses = self.form_service.read()
 
-        self.video_service.download(responses)
+        self.video_service.download(responses[0:limit])
