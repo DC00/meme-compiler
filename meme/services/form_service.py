@@ -67,6 +67,8 @@ class FormService:
         }
 
     def ingest(self, metadata):
+        metadata = [ m for m in metadata if m is not None ]
+
         for data in metadata:
             self.update(data)
 
