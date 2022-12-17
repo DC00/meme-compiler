@@ -3,8 +3,8 @@ import glob
 
 from google.cloud import storage
 
-
 from meme.lib import VideoAdapter
+from meme.lib import MetadataAdapter
 
 class VideoService:
 
@@ -23,16 +23,20 @@ class VideoService:
             self.bucket_name = data["bucket"]
 
         self.bucket = self.storage.bucket(self.bucket_name)
-        self.adapter = VideoAdapter(self.bucket, self.force)
+        self.video_adapter = VideoAdapter(self.bucket, self.force)
+        self.metadata_adapter = MetadataAdapter()
 
         return self
 
+    def ingest(self, responses):
+        return [ response.download(self.metadata_adapter) for response in responses ]
+
     def download(self, responses):
-        [ response.download(self.adapter) for response in responses ]
+        [ response.download(self.video_adapter) for response in responses ]
 
         return glob.glob("*.mp4")
 
-    def backup(self, responses):
+    def store(self, responses):
         videos = self.download(responses)
 
         uploaded = [ v for v in videos if self.upload(v) ]

@@ -13,7 +13,7 @@ class VideoAdapter:
         try:
             info = downloader.extract_info(params["mc_url"], download=False)
         except:
-            print(f"MEME_COMPILER:INFO: Error when downloading video")
+            print(f"MEME_COMPILER:INFO: Error when downloading video: {params['mc_url']}")
             return
 
         filename = downloader._prepare_filename(info)
@@ -23,4 +23,4 @@ class VideoAdapter:
         if self.force is not True and blob.exists():
             print(f"MEME_COMPILER:INFO:{filename} already in google cloud")
 
-        return [ downloader.download(params["mc_url"]) if self.force or blob.exists() is not True else None ]
+        return [ downloader.download(params["mc_url"]) if self.force or blob.exists() is False else None ]

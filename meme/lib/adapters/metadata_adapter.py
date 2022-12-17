@@ -9,12 +9,16 @@ class MetadataAdapter:
     def download(self, params):
         downloader = YoutubeDL(params)
 
-        info = downloader.extract_info(params["mc_url"], download=False)
+        try:
+            info = downloader.extract_info(params["mc_url"], download=False)
+        except:
+            print(f"MEME_COMPILER:INFO: Error when downloading video: {params['mc_url']}")
+            return
 
         url         = params["mc_url"]
         platform    = info["extractor"].lower()
         identifier  = info["id"]
-        filename    = downloader._prepare_filename(info)
+        filename    = downloader._prepare_filename(info).lower()
 
         params = {
             "url": url,

@@ -46,22 +46,7 @@ python -V
 
 ## Usage
 
-#### Download videos into current directory
-
-```
-from meme import *
-
-compiler = Compiler.build()
-compiler.download(10)
-```
-
-#### Backup videos to Google Storage
-```
-from meme import *
-
-compiler = Compiler.build()
-compiler.ingest(10)
-```
+#### TODO
 
 ### YT-DLP
 

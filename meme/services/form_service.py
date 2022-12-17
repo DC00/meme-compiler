@@ -9,10 +9,19 @@ from meme.models import Response
 
 class FormService:
 
+    COLUMNS = {
+        'Timestamp': 'A',
+        'URL': 'B',
+        'Start Time': 'C',
+        'End Time': 'D',
+        'Platform': 'E',
+        'Identifier': 'F',
+        'Filename': 'G'
+    }
+
     SHEET_OFFSET = 2
-    COMPLETED_NOTE = "processed"
     SHEET = "'Form Responses 1'"
-    INPUT_OPTION = "USER_ENTERED"
+    INPUT_OPTION = "RAW"
 
     @classmethod
     def build(cls):
@@ -31,11 +40,9 @@ class FormService:
 
         return self
 
-    def read(self, limit=10):
+    def read(self):
         try:
-            download_range = self.SHEET + f"!1:{limit + 1}"
-
-            result = self.service.spreadsheets().values().get(spreadsheetId=self.sheet_id, range=download_range).execute()
+            result = self.service.spreadsheets().values().get(spreadsheetId=self.sheet_id, range=self.SHEET).execute()
 
             rows = result.get("values", [])
             rows.pop(0)
@@ -59,6 +66,12 @@ class FormService:
             "end_at": row[3] if len(row) > 3 else ""
         }
 
+    def ingest(self, metadata):
+        metadata = [ m for m in metadata if m is not None ]
+
+        for data in metadata:
+            self.update(data)
+
     @functools.lru_cache(maxsize=10000)
     def urls(self):
         return [ response.url for response in self.responses ]
@@ -68,12 +81,14 @@ class FormService:
 
         return values.index(url) + self.SHEET_OFFSET if url in values else -1
 
-    def update(self, url):
-        row = self.row_of(url)
+    def update(self, data):
+        row = self.row_of(data.url)
 
         if row > 0:
-            range_name = f"'Form Responses 1'!C{row}"
-            values = [ [self.COMPLETED_NOTE] ]
+            # A1 Notation: https://developers.google.com/sheets/api/guides/concepts#a1_notation
+            # 'Form Responses 1'!E{row}:H{row}
+            range_name = f"{self.SHEET}!{self.COLUMNS['Platform']}{row}:{self.COLUMNS['Filename']}{row}"
+            values = [[ data.platform, data.identifier, data.filename ]]
             body = { "values": values }
 
             return self.service.spreadsheets().values().update(spreadsheetId=self.sheet_id, range=range_name, valueInputOption=self.INPUT_OPTION, body=body).execute()
