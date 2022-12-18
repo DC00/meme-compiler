@@ -9,7 +9,11 @@ def valid_response():
         "timestamp": "8/14/2022 0:24:36",
         "url": "https://www.youtube.com/watch?v=Y4LdCdaYppI",
         "start_at": "00:00",
-        "end_at": "00:10"
+        "end_at": "00:10",
+        "platform": "youtube",
+        "identifier": "Y4LdCdaYppI",
+        "filename": "filename_Y4LdCdaYppI",
+        "storage_link": "gs://bucket_uid/filename"
     }
     return Response(params)
 
@@ -20,7 +24,11 @@ def empty_response():
         "timestamp": "",
         "url": "",
         "start_at": "",
-        "end_at": ""
+        "end_at": "",
+        "platform": "",
+        "identifier": "",
+        "filename": "",
+        "storage_link": ""
     }
     return Response(params)
 
@@ -31,7 +39,11 @@ def no_timestamp_response():
         "timestamp": "8/14/2022 0:24:36",
         "url": "https://www.youtube.com/watch?v=Y4LdCdaYppI",
         "start_at": "",
-        "end_at": ""
+        "end_at": "",
+        "platform": "youtube",
+        "identifier": "Y4LdCdaYppI",
+        "filename": "filename_Y4LdCdaYppI",
+        "storage_link": "gs://bucket_uid/filename"
     }
     return Response(params)
 

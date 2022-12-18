@@ -1,7 +1,7 @@
 from yt_dlp import YoutubeDL
 
 # used for downloading each video
-class VideoAdapter:
+class ResponseAdapter:
 
     def __init__(self, bucket, force):
         self.bucket = bucket
