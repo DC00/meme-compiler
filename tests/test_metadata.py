@@ -8,7 +8,8 @@ def valid_metadata():
     params = {
         "platform": "youtube",
         "identifier": "dQw4w9WgXcQ",
-        "filename": "watch_me_Youtube[dQw4w9WgXcQ]"
+        "filename": "watch_me_Youtube[dQw4w9WgXcQ]",
+        "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
     }
     return Metadata(params)
 
@@ -18,7 +19,8 @@ def invalid_metadata():
     params = {
         "platform": "crunchyroll",
         "identifier": "342342",
-        "filename": "weebcity[342342]"
+        "filename": "weebcity[342342]",
+        "url": "https://www.crunchyroll.com/342342"
     }
     return Metadata(params)
 

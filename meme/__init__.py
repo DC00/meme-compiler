@@ -6,6 +6,6 @@ from meme.services import FormService
 from meme.services import VideoService
 
 from meme.lib.adapters import MetadataAdapter
-from meme.lib.adapters import VideoAdapter
+from meme.lib.adapters import ResponseAdapter
 
 from meme.compiler import Compiler

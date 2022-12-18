@@ -16,7 +16,8 @@ class FormService:
         'End Time': 'D',
         'Platform': 'E',
         'Identifier': 'F',
-        'Filename': 'G'
+        'Filename': 'G',
+        'Storage Link': 'H'
     }
 
     SHEET_OFFSET = 2
@@ -48,8 +49,8 @@ class FormService:
             rows.pop(0)
             rows = list(filter(None, rows))
 
-            responses = [ Response(self.params_for(row)) for row in rows ]
-            self.responses = [ response for response in responses if response.is_valid() ]
+            responses = [ Response.from_row(row) for row in rows ]
+            self.responses = [ response for response in responses if response.is_valid() and response.storage_link is None ]
 
         except HttpError as error:
             print(f"An error occurred: {error}")
@@ -57,14 +58,6 @@ class FormService:
             return error
 
         return self.responses
-
-    def params_for(self, row):
-        return {
-            "timestamp": row[0],
-            "url": row[1],
-            "start_at": row[2] if len(row) > 2 else "",
-            "end_at": row[3] if len(row) > 3 else ""
-        }
 
     def ingest(self, metadata):
         metadata = [ m for m in metadata if m is not None ]

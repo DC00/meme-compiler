@@ -5,8 +5,7 @@ import pdb
 try:
     mc  = Compiler.build()
 
-    mc.ingest(100)
+    mc.download(1)
 
-    print("done")
 except KeyboardInterrupt:
     exit()

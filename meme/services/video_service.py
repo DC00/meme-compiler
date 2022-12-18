@@ -3,8 +3,9 @@ import glob
 
 from google.cloud import storage
 
-from meme.lib import VideoAdapter
+from meme.lib import ResponseAdapter
 from meme.lib import MetadataAdapter
+from meme.models import Video
 
 class VideoService:
 
@@ -23,7 +24,7 @@ class VideoService:
             self.bucket_name = data["bucket"]
 
         self.bucket = self.storage.bucket(self.bucket_name)
-        self.video_adapter = VideoAdapter(self.bucket, self.force)
+        self.video_adapter = ResponseAdapter(self.bucket, self.force)
         self.metadata_adapter = MetadataAdapter()
 
         return self

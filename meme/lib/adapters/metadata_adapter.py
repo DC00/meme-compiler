@@ -18,7 +18,7 @@ class MetadataAdapter:
         url         = params["mc_url"]
         platform    = info["extractor"].lower()
         identifier  = info["id"]
-        filename    = downloader._prepare_filename(info).lower()
+        filename    = downloader._prepare_filename(info)
 
         params = {
             "url": url,

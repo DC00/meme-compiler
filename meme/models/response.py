@@ -4,14 +4,33 @@ class Response:
 
     MAX_DURATION_SECONDS = 180
 
+    @classmethod
+    def from_row(cls, row):
+        params = {
+            "timestamp": row[0],
+            "url": row[1],
+            "start_at": row[2] if len(row) > 2 else None,
+            "end_at": row[3] if len(row) > 3 else None,
+            "platform": row[4] if len(row) > 4 else None,
+            "identifier": row[5] if len(row) > 5 else None,
+            "filename": row[6] if len(row) > 6 else None,
+            "storage_link": row[7] if len(row) > 7 else None
+        }
+
+        return cls(params)
+
     def __init__(self, params):
         self.url = params["url"]
         self.timestamp = params["timestamp"]
         self.start_at = params["start_at"]
         self.end_at = params["end_at"]
+        self.platform = params["platform"]
+        self.identifier = params["identifier"]
+        self.filename = params["filename"]
+        self.storage_link = params["storage_link"]
 
     def __repr__(self):
-        return f"Response(timestamp={self.timestamp}, url={self.url}, start_at={self.start_at}, end_at={self.end_at}"
+        return f"Response(timestamp={self.timestamp}, url={self.url}, start_at={self.start_at}, end_at={self.end_at}, platform={self.platform}, identifier={self.identifier}, storage_link={self.storage_link}"
 
     def is_valid(self):
         return self.__valid_url() and self.__valid_timestamps()
