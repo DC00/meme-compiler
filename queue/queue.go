@@ -8,6 +8,10 @@ import (
 	taskspb "cloud.google.com/go/cloudtasks/apiv2/cloudtaskspb"
 )
 
+const (
+	serviceAccountEmail = "meme-compiler@meme-compiler.iam.gserviceaccount.com"
+)
+
 type CloudTasksClient struct {
 	client    *cloudtasks.Client
 	projectID string
@@ -42,6 +46,12 @@ func (c *CloudTasksClient) CreateTask(ctx context.Context, url string, payload [
 					Body:       payload,
 					Headers: map[string]string{
 						"Content-Type": "application/json",
+					},
+					AuthorizationHeader: &taskspb.HttpRequest_OidcToken{
+						OidcToken: &taskspb.OidcToken{
+							ServiceAccountEmail: serviceAccountEmail,
+							Audience:            url,
+						},
 					},
 				},
 			},
