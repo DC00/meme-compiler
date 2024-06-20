@@ -9,7 +9,7 @@ import (
 
 func main() {
 	projectID := "meme-compiler"
-	locationID := "us-central1"
+	locationID := "us-east4"
 	queueID := "mc-queue"
 
 	cloudTasksClient, err := queue.NewCloudTasksClient(projectID, locationID, queueID)

@@ -1,15 +1,11 @@
-// queue/queue.go
-
 package queue
 
 import (
 	"context"
 	"fmt"
-	"time"
 
 	cloudtasks "cloud.google.com/go/cloudtasks/apiv2"
 	taskspb "cloud.google.com/go/cloudtasks/apiv2/cloudtaskspb"
-	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type CloudTasksClient struct {
@@ -49,7 +45,6 @@ func (c *CloudTasksClient) CreateTask(ctx context.Context, url string, payload [
 					},
 				},
 			},
-			ScheduleTime: timestamppb.New(time.Now().Add(5 * time.Minute)), // Schedule the task 5 minutes from now
 		},
 	}
 
