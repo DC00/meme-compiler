@@ -11,9 +11,9 @@ COPY go.* ./
 RUN go mod download
 
 # Copy local code to the container image.
-COPY main.go main.go
+COPY cmd/main.go queue/queue.go server/server.go ./
 
-RUN go build -v -o server
+RUN go build -v -o main cmd/main.go
 
 # Use the official Debian slim image for a lean production container.
 # https://docs.docker.com/develop/develop-images/multistage-build/#use-multi-stage-builds
