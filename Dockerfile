@@ -21,6 +21,11 @@ RUN go build -v -o main cmd/main.go
 # https://docs.docker.com/develop/develop-images/multistage-build/#use-multi-stage-builds
 FROM --platform=linux/amd64 debian:bookworm-slim as final
 
+RUN apt-get update -qq \
+    && apt-get install -y --no-install-recommends ca-certificates=20230311 \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
 # Copy the binary to production image from build stage
 COPY --from=build /app/main /main
 
