@@ -8,7 +8,7 @@ import (
 	"time"
 
 	cloudtasks "cloud.google.com/go/cloudtasks/apiv2"
-	taskspb "google.golang.org/genproto/googleapis/cloud/tasks/v2"
+	taskspb "cloud.google.com/go/cloudtasks/apiv2/cloudtaskspb"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -55,4 +55,8 @@ func (c *CloudTasksClient) CreateTask(ctx context.Context, url string, payload [
 
 	_, err := c.client.CreateTask(ctx, req)
 	return err
+}
+
+func (c *CloudTasksClient) Close() error {
+	return c.client.Close()
 }

@@ -1,13 +1,13 @@
-// server/server.go
-
 package server
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/DC00/meme-compiler/queue"
 )
@@ -43,7 +43,7 @@ func (s *Server) IndexHandler(w http.ResponseWriter, r *http.Request) {
 	</html>`))
 }
 
-func (server *Server) CreateSubmissionHandler(w http.ResponseWriter, r *http.Request) {
+func (s *Server) CreateSubmissionHandler(w http.ResponseWriter, r *http.Request) {
 	var submission Submission
 	err := json.NewDecoder(r.Body).Decode(&submission)
 	if err != nil {
@@ -65,7 +65,7 @@ func (server *Server) CreateSubmissionHandler(w http.ResponseWriter, r *http.Req
 	taskURL := "https://mcf-download-b473pkndcq-uk.a.run.app"
 
 	ctx := context.Background()
-	err = server.TasksClient.CreateTask(ctx, taskURL, jsonPayload)
+	err = s.TasksClient.CreateTask(ctx, taskURL, jsonPayload)
 	if err != nil {
 		log.Println("Failed to create task:", err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
@@ -77,7 +77,18 @@ func (server *Server) CreateSubmissionHandler(w http.ResponseWriter, r *http.Req
 }
 
 func (s *Server) CreateCompilationHandler(w http.ResponseWriter, r *http.Request) {
-	// Your implementation here
+	payload := "{}"
+	taskURL := "https://us-east4-meme-compiler.cloudfunctions.net/mcf-concatenate"
+	ctx := context.Background()
+	err := s.TasksClient.CreateTask(ctx, taskURL, []byte(payload))
+	if err != nil {
+		log.Println("Failed to create task:", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
+	w.Write([]byte("Task created"))
 }
 
 func (s *Server) Start() {
@@ -85,8 +96,16 @@ func (s *Server) Start() {
 	http.HandleFunc("/api/videos/v1/add", s.CreateSubmissionHandler)
 	http.HandleFunc("/api/compilations/v1/create", s.CreateCompilationHandler)
 
-	addr := ":8080"
-	fmt.Printf("Server listening on %s\n", addr)
+	// Determine port for HTTP service.
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+		log.Printf("defaulting to port %s", port)
+	}
 
-	log.Fatal(http.ListenAndServe(addr, nil))
+	// Start HTTP server.
+	log.Printf("listening on port %s", port)
+	if err := http.ListenAndServe(":"+port, nil); err != nil {
+		log.Fatal(err)
+	}
 }

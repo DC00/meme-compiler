@@ -2,14 +2,13 @@ package main
 
 import (
 	"log"
-	"os"
 
 	"github.com/DC00/meme-compiler/queue"
 	"github.com/DC00/meme-compiler/server"
 )
 
 func main() {
-	projectID := os.Getenv("GOOGLE_CLOUD_PROJECT")
+	projectID := "meme-compiler"
 	locationID := "us-central1"
 	queueID := "mc-queue"
 
@@ -17,7 +16,6 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to create Cloud Tasks client: %v", err)
 	}
-	defer cloudTasksClient.client.Close()
 
 	srv := server.NewServer(cloudTasksClient)
 	srv.Start()
