@@ -2,10 +2,7 @@ module github.com/DC00/meme-compiler
 
 go 1.22.4
 
-require (
-	cloud.google.com/go/cloudtasks v1.12.8
-	google.golang.org/protobuf v1.34.2
-)
+require cloud.google.com/go/cloudtasks v1.12.8
 
 require (
 	cloud.google.com/go/auth v0.3.0 // indirect
@@ -38,4 +35,5 @@ require (
 	google.golang.org/genproto/googleapis/api v0.0.0-20240610135401-a8a62080eff3 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240610135401-a8a62080eff3 // indirect
 	google.golang.org/grpc v1.64.0 // indirect
+	google.golang.org/protobuf v1.34.2 // indirect
 )
