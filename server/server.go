@@ -79,7 +79,7 @@ func (s *Server) CreateSubmissionHandler(w http.ResponseWriter, r *http.Request)
 	}
 
 	w.WriteHeader(http.StatusCreated)
-	w.Write([]byte(`{"message": "Task created"}`))
+	w.Write([]byte(`{"message": "Adding video to MemeCompiler"}`))
 }
 
 func (s *Server) CreateCompilationHandler(w http.ResponseWriter, r *http.Request) {
@@ -98,7 +98,7 @@ func (s *Server) CreateCompilationHandler(w http.ResponseWriter, r *http.Request
 	}
 
 	w.WriteHeader(http.StatusCreated)
-	w.Write([]byte(`{"message": "Task created"}`))
+	w.Write([]byte(`{"message": "Creating compilation. This may take a few minutes."}`))
 }
 
 func (s *Server) Start() {
