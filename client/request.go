@@ -2,8 +2,9 @@ package client
 
 type AddVideoRequest struct {
 	URL string `json:"url"`
+	Webhook string `json:"webhook,omitempty"`
 }
 
 type CreateCompilationRequest struct {
-	// Add fields as necessary
+	Webhook string `json:"webhook,omitempty"`
 }

@@ -11,11 +11,12 @@ import (
 )
 
 type Submission struct {
-	URL string `json:"url"`
+	URL     string `json:"url"`
+	Webhook string `json:"webhook"`
 }
 
-type RequestPayload struct {
-	URL string `json:"url"`
+type CompilationRequest struct {
+	Webhook string `json:"webhook"`
 }
 
 type Server struct {
@@ -54,11 +55,9 @@ func (s *Server) CreateSubmissionHandler(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	url := submission.URL
-	log.Printf("Received submission: %s\n", url)
+	log.Printf("Received submission: URL=%s, Webhook=%s\n", submission.URL, submission.Webhook)
 
-	payload := RequestPayload{URL: url}
-	jsonPayload, err := json.Marshal(payload)
+	payload, err := json.Marshal(submission)
 	if err != nil {
 		log.Println("Failed to marshal JSON payload:", err)
 		http.Error(w, `{"error": "Internal Server Error"}`, http.StatusInternalServerError)
@@ -71,7 +70,7 @@ func (s *Server) CreateSubmissionHandler(w http.ResponseWriter, r *http.Request)
 	}
 
 	ctx := context.Background()
-	err = s.TasksClient.CreateTask(ctx, taskURL, jsonPayload)
+	err = s.TasksClient.CreateTask(ctx, taskURL, payload)
 	if err != nil {
 		log.Println("Failed to create task:", err)
 		http.Error(w, `{"error": "Internal Server Error"}`, http.StatusInternalServerError)
@@ -83,14 +82,29 @@ func (s *Server) CreateSubmissionHandler(w http.ResponseWriter, r *http.Request)
 }
 
 func (s *Server) CreateCompilationHandler(w http.ResponseWriter, r *http.Request) {
-	payload := "{}"
+	var compilationRequest CompilationRequest
+	err := json.NewDecoder(r.Body).Decode(&compilationRequest)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	log.Printf("Received compilation request: Webhook=%s\n", compilationRequest.Webhook)
+
+	payload, err := json.Marshal(compilationRequest)
+	if err != nil {
+		log.Println("Failed to marshal JSON payload:", err)
+		http.Error(w, `{"error": "Internal Server Error"}`, http.StatusInternalServerError)
+		return
+	}
+
 	taskURL := os.Getenv("COMPILATION_TASK_URL")
 	if taskURL == "" {
 		taskURL = "https://us-east4-meme-compiler.cloudfunctions.net/mcf-concatenate"
 	}
 
 	ctx := context.Background()
-	err := s.TasksClient.CreateTask(ctx, taskURL, []byte(payload))
+	err = s.TasksClient.CreateTask(ctx, taskURL, payload)
 	if err != nil {
 		log.Println("Failed to create task:", err)
 		http.Error(w, `{"error": "Internal Server Error"}`, http.StatusInternalServerError)

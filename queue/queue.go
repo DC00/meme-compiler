@@ -61,7 +61,3 @@ func (c *CloudTasksClient) CreateTask(ctx context.Context, url string, payload [
 	_, err := c.client.CreateTask(ctx, req)
 	return err
 }
-
-func (c *CloudTasksClient) Close() error {
-	return c.client.Close()
-}
