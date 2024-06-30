@@ -14,6 +14,7 @@ RUN go mod download
 COPY cmd cmd
 COPY queue queue
 COPY server server
+COPY client client
 
 RUN go build -v -o main cmd/main.go
 
