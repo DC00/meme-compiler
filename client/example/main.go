@@ -4,18 +4,21 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/DC00/meme-compiler/client"
 )
 
+var identityToken = os.Getenv("IDENTITY_TOKEN")
+
 func main() {
-	c := client.NewClient("identityToken")
+	c := client.NewClient(identityToken)
 
 	ctx := context.Background()
 
 	// Add a video
 	addResp, err := c.Videos.Add(ctx, &client.AddVideoRequest{
-		URL: "https://example.com/video.mp4",
+		URL:     "https://example.com/video.mp4",
 		Webhook: "https://example.com/webhook",
 	})
 	if err != nil {
