@@ -1,5 +1,5 @@
-# meme-compiler
-Download, normalize, and create compilations of funny videos
+# MemeCompiler
+An API to download, normalize, and create compilations of funny videos
 
 ## Development
 
