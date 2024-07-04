@@ -1,6 +1,13 @@
 # MemeCompiler
 An API to download, normalize, and create compilations of funny videos
 
+## Setup
+Steps needed to configure publishing to Google Artifact Registry. Guided link [here](https://cloud.google.com/artifact-registry/docs/docker/store-docker-container-images).
+
+- Create new registry
+- `gcloud auth login`
+- Configure gcloud: `gcloud auth configure-docker us-east4-docker.pkg.dev`
+
 ## Development
 
 Build the container
