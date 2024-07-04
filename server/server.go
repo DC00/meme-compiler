@@ -112,7 +112,7 @@ func (s *Server) CreateCompilationHandler(w http.ResponseWriter, r *http.Request
 	}
 
 	w.WriteHeader(http.StatusCreated)
-	w.Write([]byte(`{"message": "Creating compilation. This may take a few minutes."}`))
+	w.Write([]byte(`{"message": "Compilation creation requested"}`))
 }
 
 func (s *Server) Start() {
