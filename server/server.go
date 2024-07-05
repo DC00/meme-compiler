@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"net/url"
@@ -47,7 +48,7 @@ func (s *Server) CreateSubmissionHandler(w http.ResponseWriter, r *http.Request)
 	var submission Submission
 	err := json.NewDecoder(r.Body).Decode(&submission)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		http.Error(w, `{"message": "Could not parse the request. Please submit a different url."}`, http.StatusBadRequest)
 		return
 	}
 
@@ -94,7 +95,7 @@ func (s *Server) CreateCompilationHandler(w http.ResponseWriter, r *http.Request
 	var compilationRequest CompilationRequest
 	err := json.NewDecoder(r.Body).Decode(&compilationRequest)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		http.Error(w, fmt.Sprintf(`{"message": "%v"}`, err.Error()), http.StatusBadRequest)
 		return
 	}
 
@@ -103,7 +104,7 @@ func (s *Server) CreateCompilationHandler(w http.ResponseWriter, r *http.Request
 	payload, err := json.Marshal(compilationRequest)
 	if err != nil {
 		log.Println("Failed to marshal JSON payload:", err)
-		http.Error(w, `{"error": "Internal Server Error. Could not package the payload."}`, http.StatusInternalServerError)
+		http.Error(w, `{"message": "Internal Server Error. Could not package the payload."}`, http.StatusInternalServerError)
 		return
 	}
 
@@ -116,7 +117,7 @@ func (s *Server) CreateCompilationHandler(w http.ResponseWriter, r *http.Request
 	err = s.TasksClient.CreateTask(ctx, taskURL, payload)
 	if err != nil {
 		log.Println("Failed to create task:", err)
-		http.Error(w, `{"error": "Internal Server Error"}`, http.StatusInternalServerError)
+		http.Error(w, `{"message": "Internal Server Error"}`, http.StatusInternalServerError)
 		return
 	}
 
