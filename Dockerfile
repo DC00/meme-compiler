@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 golang:1.22-bookworm as build
+FROM --platform=linux/amd64 golang:1.22.3-bookworm as build
 
 # Create and change to the app directory.
 WORKDIR /app

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 
 	"github.com/DC00/meme-compiler/queue"
@@ -19,6 +20,10 @@ type CompilationRequest struct {
 	Webhook string `json:"webhook"`
 }
 
+type Response struct {
+	Message string `json:"message"`
+}
+
 type Server struct {
 	TasksClient *queue.CloudTasksClient
 }
@@ -27,6 +32,12 @@ func NewServer(tasksClient *queue.CloudTasksClient) *Server {
 	return &Server{
 		TasksClient: tasksClient,
 	}
+}
+
+func (s *Server) writeResponse(w http.ResponseWriter, statusCode int, message string) {
+	w.WriteHeader(statusCode)
+	response := Response{Message: message}
+	json.NewEncoder(w).Encode(response)
 }
 
 func (s *Server) IndexHandler(w http.ResponseWriter, r *http.Request) {
@@ -46,12 +57,20 @@ func (s *Server) CreateSubmissionHandler(w http.ResponseWriter, r *http.Request)
 	var submission Submission
 	err := json.NewDecoder(r.Body).Decode(&submission)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		s.writeResponse(w, http.StatusBadRequest, "Could not parse the request. Please submit a different url.")
 		return
 	}
 
+	// Get the value of the "url" field from the request body and validate
 	if submission.URL == "" {
-		http.Error(w, `{"error": "URL is required"}`, http.StatusBadRequest)
+		s.writeResponse(w, http.StatusBadRequest, "Missing url field. Please submit a url to a video!")
+		return
+	}
+
+	// Check if Reid submitted some weirdness
+	_, err = url.ParseRequestURI(submission.URL)
+	if err != nil {
+		s.writeResponse(w, http.StatusBadRequest, "Invalid url field. Please submit a valid video link!")
 		return
 	}
 
@@ -60,7 +79,7 @@ func (s *Server) CreateSubmissionHandler(w http.ResponseWriter, r *http.Request)
 	payload, err := json.Marshal(submission)
 	if err != nil {
 		log.Println("Failed to marshal JSON payload:", err)
-		http.Error(w, `{"error": "Internal Server Error"}`, http.StatusInternalServerError)
+		s.writeResponse(w, http.StatusInternalServerError, "Internal Server Error. Could not create the payload.")
 		return
 	}
 
@@ -73,19 +92,18 @@ func (s *Server) CreateSubmissionHandler(w http.ResponseWriter, r *http.Request)
 	err = s.TasksClient.CreateTask(ctx, taskURL, payload)
 	if err != nil {
 		log.Println("Failed to create task:", err)
-		http.Error(w, `{"error": "Internal Server Error"}`, http.StatusInternalServerError)
+		s.writeResponse(w, http.StatusInternalServerError, "Internal Server Error. Could not create task queue.")
 		return
 	}
 
-	w.WriteHeader(http.StatusCreated)
-	w.Write([]byte(`{"message": "Adding video to MemeCompiler"}`))
+	s.writeResponse(w, http.StatusCreated, "Adding video to MemeCompiler")
 }
 
 func (s *Server) CreateCompilationHandler(w http.ResponseWriter, r *http.Request) {
 	var compilationRequest CompilationRequest
 	err := json.NewDecoder(r.Body).Decode(&compilationRequest)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		s.writeResponse(w, http.StatusBadRequest, "Could not parse the request. Please submit a different link.")
 		return
 	}
 
@@ -94,7 +112,7 @@ func (s *Server) CreateCompilationHandler(w http.ResponseWriter, r *http.Request
 	payload, err := json.Marshal(compilationRequest)
 	if err != nil {
 		log.Println("Failed to marshal JSON payload:", err)
-		http.Error(w, `{"error": "Internal Server Error"}`, http.StatusInternalServerError)
+		s.writeResponse(w, http.StatusInternalServerError, "Internal Server Error. Could not create the payload.")
 		return
 	}
 
@@ -107,12 +125,11 @@ func (s *Server) CreateCompilationHandler(w http.ResponseWriter, r *http.Request
 	err = s.TasksClient.CreateTask(ctx, taskURL, payload)
 	if err != nil {
 		log.Println("Failed to create task:", err)
-		http.Error(w, `{"error": "Internal Server Error"}`, http.StatusInternalServerError)
+		s.writeResponse(w, http.StatusInternalServerError, "Internal Server Error")
 		return
 	}
 
-	w.WriteHeader(http.StatusCreated)
-	w.Write([]byte(`{"message": "Compilation creation requested"}`))
+	s.writeResponse(w, http.StatusCreated, "Compilation creation requested")
 }
 
 func (s *Server) Start() {

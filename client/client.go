@@ -65,13 +65,13 @@ func (c *Client) doRequest(ctx context.Context, method, path string, body interf
 		buf = new(bytes.Buffer)
 		err := json.NewEncoder(buf).Encode(body)
 		if err != nil {
-			return nil, fmt.Errorf("encoding request body: %w", err)
+			return &Response{Message: "Encoding request body failed"}, fmt.Errorf("encoding request body: %w", err)
 		}
 	}
 
 	req, err := http.NewRequestWithContext(ctx, method, url, buf)
 	if err != nil {
-		return nil, fmt.Errorf("creating request: %w", err)
+		return &Response{Message: "Creating request failed"}, fmt.Errorf("creating request: %w", err)
 	}
 
 	req.Header.Set("Content-Type", "application/json")
@@ -79,18 +79,18 @@ func (c *Client) doRequest(ctx context.Context, method, path string, body interf
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("making request: %w", err)
+		return &Response{Message: "Making request failed"}, fmt.Errorf("making request: %w", err)
 	}
 	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusCreated {
-		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
-	}
 
 	var response Response
 	err = json.NewDecoder(resp.Body).Decode(&response)
 	if err != nil {
-		return nil, fmt.Errorf("decoding response: %w", err)
+		return &Response{Message: "Decoding response failed"}, fmt.Errorf("decoding response: %w", err)
+	}
+
+	if resp.StatusCode != http.StatusCreated {
+		return &response, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
 	}
 
 	return &response, nil

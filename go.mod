@@ -1,6 +1,6 @@
 module github.com/DC00/meme-compiler
 
-go 1.22.4
+go 1.22.3
 
 require cloud.google.com/go/cloudtasks v1.12.8
 
