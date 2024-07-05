@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 
 	"github.com/DC00/meme-compiler/queue"
@@ -50,8 +51,16 @@ func (s *Server) CreateSubmissionHandler(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
+	// Get the value of the "url" field from the request body and validate
 	if submission.URL == "" {
-		http.Error(w, `{"error": "URL is required"}`, http.StatusBadRequest)
+		http.Error(w, `{"message": "Missing url field. Please submit a url to a video!"}`, http.StatusBadRequest)
+		return
+	}
+
+	// Check if Reid submitted some weirdness
+	_, err = url.ParseRequestURI(submission.URL)
+	if err != nil {
+		http.Error(w, `{"message": "Invalid url field. Please submit a valid video link!"}`, http.StatusBadRequest)
 		return
 	}
 
@@ -60,7 +69,7 @@ func (s *Server) CreateSubmissionHandler(w http.ResponseWriter, r *http.Request)
 	payload, err := json.Marshal(submission)
 	if err != nil {
 		log.Println("Failed to marshal JSON payload:", err)
-		http.Error(w, `{"error": "Internal Server Error"}`, http.StatusInternalServerError)
+		http.Error(w, `{"message": "Internal Server Error. Could not package the payload."}`, http.StatusInternalServerError)
 		return
 	}
 
@@ -73,7 +82,7 @@ func (s *Server) CreateSubmissionHandler(w http.ResponseWriter, r *http.Request)
 	err = s.TasksClient.CreateTask(ctx, taskURL, payload)
 	if err != nil {
 		log.Println("Failed to create task:", err)
-		http.Error(w, `{"error": "Internal Server Error"}`, http.StatusInternalServerError)
+		http.Error(w, `{"message": "Internal Server Error. Could not create task queue."}`, http.StatusInternalServerError)
 		return
 	}
 
@@ -94,7 +103,7 @@ func (s *Server) CreateCompilationHandler(w http.ResponseWriter, r *http.Request
 	payload, err := json.Marshal(compilationRequest)
 	if err != nil {
 		log.Println("Failed to marshal JSON payload:", err)
-		http.Error(w, `{"error": "Internal Server Error"}`, http.StatusInternalServerError)
+		http.Error(w, `{"error": "Internal Server Error. Could not package the payload."}`, http.StatusInternalServerError)
 		return
 	}
 
