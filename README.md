@@ -40,3 +40,17 @@ docker pull \
     us-east4-docker.pkg.dev/meme-compiler/mc-artifacts/mc-api:1.0.0
 ```
 
+## API
+
+The API is defined in the OpenAPI spec file: `api/openapi/video.yml` and generated with [oapi-codegen](https://github.com/oapi-codegen/oapi-codegen?tab=readme-ov-file#install).
+
+### Install OpenAPI Code Gen tools
+```
+go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest
+oapi-codegen -version
+```
+
+Generate the API with this script:
+```
+./scripts/openapi-http.sh video internal/video/port port
+```

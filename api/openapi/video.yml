@@ -1,0 +1,75 @@
+openapi: '3.0.0'
+info:
+  version: '1.0.0'
+  title: Meme Compiler API
+  description: Download, normalize, and create compilations of funny videos
+servers:
+  - url: https://{hostname}/api
+    variables:
+      hostname:
+        default: localhost
+security:
+  - bearerAuth: []
+paths:
+  /v1/videos:
+    post:
+      summary: Submit a request to add a video to the meme compilation
+      description: Send a request which contains a URL. The API will invoke a functions to download, normalize, and concatenate the video to the meme compilation.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Video'
+      responses:
+        '200':
+          description: Downloading video
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    get:
+      summary: Get a list of videos
+      description: Retrieves a list of videos that have been downloaded.
+      responses:
+        '200':
+          description: A list of videos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Video'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+  schemas:
+    Video:
+      type: object
+      required:
+        - url
+      properties:
+        url:
+          type: string
+          format: uri
+          example: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+    Error:
+      type: object
+      required:
+        - handle
+        - message
+      properties:
+        handle:
+          type: string
+        message:
+          type: string

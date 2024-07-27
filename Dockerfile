@@ -1,26 +1,21 @@
-FROM --platform=linux/amd64 golang:1.22.3-bookworm as build
+FROM golang:1.22.4-bookworm AS build
 
-# Create and change to the app directory.
-WORKDIR /app
+ARG SERVICE=video
+
+# Create and change to the internal service directory
+WORKDIR /internal/$SERVICE
 
 # Root user to install dependencies and build code
 USER root
 
-# Expecting to copy go.mod and if present go.sum
-COPY go.* ./
-RUN go mod download
+# Copy code to the container
+COPY internal /internal/
 
-# Copy local code to the container image.
-COPY cmd cmd
-COPY queue queue
-COPY server server
-COPY client client
+# Build the service application
+RUN go build -v -o /app .
 
-RUN go build -v -o main cmd/main.go
-
-# Use the official Debian slim image for a lean production container.
-# https://docs.docker.com/develop/develop-images/multistage-build/#use-multi-stage-builds
-FROM --platform=linux/amd64 debian:bookworm-slim as final
+# Use the official Debian slim image for a lean production container
+FROM debian:bookworm-slim AS final
 
 RUN apt-get update -qq \
     && apt-get install -y --no-install-recommends ca-certificates=20230311 \
@@ -28,6 +23,6 @@ RUN apt-get update -qq \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy the binary to production image from build stage
-COPY --from=build /app/main /main
+COPY --from=build /app /app
 
-CMD ["/main"]
+CMD ["/app"]
