@@ -4,6 +4,9 @@ include .env
 VIDEO_PATH = ./internal/video/
 CONTAINER_NAME = mcc
 
+setup:
+	brew install liquibase
+
 build:
 	gofmt -s -w .
 	cd $(VIDEO_PATH) && go build -v -o ../../mc main.go

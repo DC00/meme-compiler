@@ -2,13 +2,15 @@
 # Requires an OpenAPI specification at api/openapi/<domain>.yml
 # ./scripts/openapi-http.sh <domain> </path/to/output/directory> <package of port>
 #
+# service    = name of domain (video) and filename of the openapi file (video.yml)
+# output_dir = output directory for the http server (chi) and types
+# package    = name of package (also video)
+#
 # Example:
 # ./scripts/openapi-http.sh video internal/video/port port
+
 set -e
 
-# service = name of domain (video) and filename of the openapi file (video.yml)
-# output_dir = output directory for the http server (chi) and types
-# package = name of package (also video)
 readonly service="$1"
 readonly output_dir="$2"
 readonly package="$3"
