@@ -13,8 +13,9 @@ Steps needed to configure publishing to Google Artifact Registry. Guided link [h
 ### Docker Desktop
 - [Install docker desktop](https://www.docker.com/products/docker-desktop/)
 
-### Makefile
-Setup the remaining pieces:
+### Liquibase
+- Using liquibase for schema management
+- Need to install Java. Can use homebrew on MacOS. Handled in Makefile here:
 ```
 make setup
 ```
